@@ -105,27 +105,22 @@ namespace Notes.DataLayer.Sql
             }
         }
 
-        public IEnumerable<Category> GetUsersCategories(int userId)
+        public void Update(string name, int id)
         {
-            using (SqlConnection connection = new SqlConnection(_connectionString))
+            using (var connection = new SqlConnection(_connectionString))
             {
                 connection.Open();
-                using (SqlCommand command = connection.CreateCommand())
+                using (var command = connection.CreateCommand())
                 {
-                    command.CommandText = "select Id, Name from Categories where UserId = @userId";
-                    command.Parameters.AddWithValue("@userId", userId);
+                    command.CommandText = "update Categories set Name = @name where Id = @id";
+                    command.Parameters.AddWithValue("@name", name);
+                    command.Parameters.AddWithValue("@id", id);
 
                     using (var reader = command.ExecuteReader())
                     {
-                        while (reader.Read())
-                        {
-                            yield return new Category()
-                            {
-                                Id = reader.GetInt32(reader.GetOrdinal("Id")),
-                                Name = reader.GetString(reader.GetOrdinal("Name")),
-                                UserId = userId
-                            };
-                        }
+                        if (!reader.Read())
+                            throw new ArgumentException($"Заметка с id: {id} не найдена");
+                        command.ExecuteNonQuery();
                     }
                 }
             }

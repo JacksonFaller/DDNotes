@@ -218,7 +218,7 @@ namespace Notes.DataLayer.Sql.Tests
             note.Text = newText;
             note.Title = newTitle;
 
-            _notesRepository.UpdateNote(note);
+            _notesRepository.Update(note);
             var result = _notesRepository.Get(note.Id);
 
             Console.WriteLine($"Updated note NoteText: {result.Text}, NoteTitle: {result.Title}");

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices.ComTypes;
 using Notes.Model;
 
 namespace Notes.DataLayer.Sql
@@ -21,12 +22,14 @@ namespace Notes.DataLayer.Sql
                 connection.Open();
                 using (var command = connection.CreateCommand())
                 {
-                    DateTime currentDate = DateTime.Now;
+                    note.CreationDate = DateTime.Now;
+                    note.ChangingDate = DateTime.Now;
+
                     command.CommandText = "insert into Notes output Inserted.Id values (@title, @text, @changingDate, @creationDate, @creator)";
                     command.Parameters.AddWithValue("@title", note.Title);
                     command.Parameters.AddWithValue("@text", note.Text);
-                    command.Parameters.AddWithValue("@changingDate", currentDate);
-                    command.Parameters.AddWithValue("@creationDate", currentDate);
+                    command.Parameters.AddWithValue("@changingDate", note.ChangingDate);
+                    command.Parameters.AddWithValue("@creationDate", note.CreationDate);
                     command.Parameters.AddWithValue("@creator", note.Creator);
 
                     using (var reader = command.ExecuteReader())
@@ -123,19 +126,23 @@ namespace Notes.DataLayer.Sql
 
         public IEnumerable<Note> GetSharedNotes(int userId)
         {
-            using (SqlConnection connection = new SqlConnection(_connectionString))
+            using (var connection = new SqlConnection(_connectionString))
             {
                 connection.Open();
-                using (SqlCommand command = connection.CreateCommand())
+                using (var command = connection.CreateCommand())
                 {
                     command.CommandText = "select NoteId from NotesToUsers where UserId = @userId";
                     command.Parameters.AddWithValue("@userId", userId);
 
                     using (var reader = command.ExecuteReader())
                     {
-                        while (reader.Read())
+                        using (var getNoteConnection = new SqlConnection(_connectionString))
                         {
-                            yield return Get(reader.GetInt32(reader.GetOrdinal("NoteId")));
+                            getNoteConnection.Open();
+                            while (reader.Read())
+                            {
+                                yield return Get(reader.GetInt32(reader.GetOrdinal("NoteId")), getNoteConnection);
+                            }
                         }
                     }
                 }
@@ -203,8 +210,8 @@ namespace Notes.DataLayer.Sql
                 connection.Open();
                 using (var command = connection.CreateCommand())
                 {
-                    command.CommandText = "select * from Notes where Name = @name";
-                    command.Parameters.AddWithValue("@name", title);
+                    command.CommandText = "select * from Notes where Title = @title";
+                    command.Parameters.AddWithValue("@title", title);
 
                     using (var reader = command.ExecuteReader())
                     {
@@ -265,18 +272,50 @@ namespace Notes.DataLayer.Sql
             }
         }
 
-        public Note UpdateNote(Note note)
+        public IEnumerable<Note> GetNotes()
         {
             using (var connection = new SqlConnection(_connectionString))
             {
                 connection.Open();
                 using (var command = connection.CreateCommand())
                 {
+                    command.CommandText = "select * from Notes";
+
+                    using (var reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            Note note = new Note
+                            {
+                                Id = reader.GetInt32(reader.GetOrdinal("Id")),
+                                Title = reader.GetString(reader.GetOrdinal("Title")),
+                                Text = reader.GetString(reader.GetOrdinal("Text")),
+                                ChangingDate = reader.GetDateTime(reader.GetOrdinal("Changing date")),
+                                CreationDate = reader.GetDateTime(reader.GetOrdinal("Creation date")),
+                                Creator = reader.GetInt32(reader.GetOrdinal("Creator"))
+                            };
+                            note.Categories = GetNoteCategories(note.Id);
+                            note.Shared = GetSharedUsers(note.Id);
+                            yield return note;
+                        }
+                    }
+                }
+            }
+        }
+
+        public Note Update(Note note)
+        {
+            using (var connection = new SqlConnection(_connectionString))
+            {
+                connection.Open();
+                using (var command = connection.CreateCommand())
+                {
+                    note.ChangingDate = DateTime.Now;
                     command.CommandText =
                         "update Notes set Title = @title, Text = @text, [Changing date] = @date where Id = @id";
                     command.Parameters.AddWithValue("@title", note.Title);
                     command.Parameters.AddWithValue("@text", note.Text);
-                    command.Parameters.AddWithValue("@date", DateTime.Now);
+                    command.Parameters.AddWithValue("@date", note.ChangingDate);
                     command.Parameters.AddWithValue("@id", note.Id);
                     command.ExecuteNonQuery();
                     return note;

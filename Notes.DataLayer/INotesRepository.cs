@@ -9,6 +9,8 @@ namespace Notes.DataLayer
         Note Create(Note note);
         void Delete(int id);
         IEnumerable<Note> GetUsersNotes(int userId);
-        Note UpdateNote(Note note);
+        Note Update(Note note);
+        IEnumerable<Note> GetNotes();
+        Note Get(int id);
     }
 }

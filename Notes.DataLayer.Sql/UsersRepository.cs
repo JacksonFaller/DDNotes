@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.IO;
 using Notes.Model;
@@ -53,6 +54,20 @@ namespace Notes.DataLayer.Sql
             }
         }
 
+        public void Delete(int id)
+        {
+            using (var connection = new SqlConnection(_connectionString))
+            {
+                connection.Open();
+                using (var command = connection.CreateCommand())
+                {
+                    command.CommandText = "delete from Users where Id = @id";
+                    command.Parameters.AddWithValue("@id", id);
+                    command.ExecuteNonQuery();
+                }
+            }
+        }
+
         public User Get(string name)
         {
             using (var connection = new SqlConnection(_connectionString))
@@ -60,7 +75,7 @@ namespace Notes.DataLayer.Sql
                 connection.Open();
                 using (var command = connection.CreateCommand())
                 {
-                    command.CommandText = "select Id, Name, Password from Users where Name = @name";
+                    command.CommandText = "select * from Users where Name = @name";
                     command.Parameters.AddWithValue("@name", name);
 
                     using (var reader = command.ExecuteReader())
@@ -71,12 +86,95 @@ namespace Notes.DataLayer.Sql
                         User user = new User
                         {
                             Id = reader.GetInt32(reader.GetOrdinal("Id")),
+                            Name = name,
+                            Password = reader.GetString(reader.GetOrdinal("Password"))
+                        };
+                        user.Categories = GetCategories(user.Id);
+                        user.Notes = _notesRepository.GetUsersNotes(user.Id);
+                        return user;
+                    }
+                }
+            }
+        }
+
+        public User Get(int id)
+        {
+            using (var connection = new SqlConnection(_connectionString))
+            {
+                connection.Open();
+                using (var command = connection.CreateCommand())
+                {
+                    command.CommandText = "select * from Users where Id = @id";
+                    command.Parameters.AddWithValue("@id", id);
+
+                    using (var reader = command.ExecuteReader())
+                    {
+                        if (!reader.Read())
+                            throw new ArgumentException($"Пользователь с id: {id} не найден");
+
+                        User user = new User
+                        {
+                            Id = id,
                             Name = reader.GetString(reader.GetOrdinal("Name")),
                             Password = reader.GetString(reader.GetOrdinal("Password"))
                         };
-                        user.Categories = _categoriesRepository.GetUsersCategories(user.Id);
+                        user.Categories = GetCategories(user.Id);
                         user.Notes = _notesRepository.GetUsersNotes(user.Id);
                         return user;
+                    }
+                }
+            }
+        }
+
+        public IEnumerable<User> GetUsers()
+        {
+            using (var connection = new SqlConnection(_connectionString))
+            {
+                connection.Open();
+                using (var command = connection.CreateCommand())
+                {
+                    command.CommandText = "select * from Users";
+
+                    using (var reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            User user = new User
+                            {
+                                Id = reader.GetInt32(reader.GetOrdinal("Id")),
+                                Name = reader.GetString(reader.GetOrdinal("Name")),
+                                Password = reader.GetString(reader.GetOrdinal("Password"))
+                            };
+                            user.Categories = GetCategories(user.Id);
+                            user.Notes = _notesRepository.GetUsersNotes(user.Id);
+                            yield return user;
+                        }
+                    }
+                }
+            }
+        }
+
+        public IEnumerable<Category> GetCategories(int id)
+        {
+            using (SqlConnection connection = new SqlConnection(_connectionString))
+            {
+                connection.Open();
+                using (SqlCommand command = connection.CreateCommand())
+                {
+                    command.CommandText = "select Id, Name from Categories where UserId = @userId";
+                    command.Parameters.AddWithValue("@userId", id);
+
+                    using (var reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            yield return new Category()
+                            {
+                                Id = reader.GetInt32(reader.GetOrdinal("Id")),
+                                Name = reader.GetString(reader.GetOrdinal("Name")),
+                                UserId = id
+                            };
+                        }
                     }
                 }
             }

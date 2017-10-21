@@ -1,0 +1,116 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Notes.API</name>
+    </assembly>
+    <members>
+        <member name="T:Notes.API.Controllers.CategoriesController">
+            <summary>
+            CategoriesRepository controller
+            </summary>
+        </member>
+        <member name="M:Notes.API.Controllers.CategoriesController.Get(System.Int32)">
+            <summary>
+            Get category by its id
+            </summary>
+            <param name="id">category id</param>
+            <returns>returns category if exists</returns>
+        </member>
+        <member name="M:Notes.API.Controllers.CategoriesController.Create(Notes.Model.Category)">
+            <summary>
+            Create new category
+            </summary>
+            <param name="category">category to create</param>
+            <returns>returns new category</returns>
+        </member>
+        <member name="M:Notes.API.Controllers.CategoriesController.Update(System.String,System.Int32)">
+            <summary>
+            Update category
+            </summary>
+            <param name="name">new category name</param>
+            <param name="id">category id</param>
+        </member>
+        <member name="M:Notes.API.Controllers.CategoriesController.Delete(System.Int32)">
+            <summary>
+            Delete category
+            </summary>
+            <param name="id">category id</param>
+        </member>
+        <member name="T:Notes.API.Controllers.NotesController">
+            <summary>
+            NotesRepository controller
+            </summary>
+        </member>
+        <member name="M:Notes.API.Controllers.NotesController.GetNotes">
+            <summary>
+            Get all notes
+            </summary>
+            <returns>returns notes enumeration</returns>
+        </member>
+        <member name="M:Notes.API.Controllers.NotesController.Get(System.Int32)">
+            <summary>
+            Get note
+            </summary>
+            <param name="id">note id</param>
+            <returns>returns note if exists</returns>
+        </member>
+        <member name="M:Notes.API.Controllers.NotesController.Create(Notes.Model.Note)">
+            <summary>
+            Create new note
+            </summary>
+            <param name="note">note to create</param>
+            <returns>returns new note</returns>
+        </member>
+        <member name="M:Notes.API.Controllers.NotesController.Update(Notes.Model.Note)">
+            <summary>
+            Update note
+            </summary>
+            <param name="note">note to update</param>
+            <returns>updated note</returns>
+        </member>
+        <member name="M:Notes.API.Controllers.NotesController.Delete(System.Int32)">
+            <summary>
+            Delete note
+            </summary>
+            <param name="id">note id to delete</param>
+        </member>
+        <member name="T:Notes.API.Controllers.UsersController">
+            <summary>
+            UsersRepository controller
+            </summary>
+        </member>
+        <member name="M:Notes.API.Controllers.UsersController.GetUsers">
+            <summary>
+            Get all users
+            </summary>
+            <returns>users enumeration</returns>
+        </member>
+        <member name="M:Notes.API.Controllers.UsersController.Get(System.Int32)">
+            <summary>
+            Get user
+            </summary>
+            <param name="id">user id</param>
+            <returns>returns user if exists</returns>
+        </member>
+        <member name="M:Notes.API.Controllers.UsersController.GetCategories(System.Int32)">
+            <summary>
+            Get users categories
+            </summary>
+            <param name="id">user id</param>
+            <returns>users categories enumeration</returns>
+        </member>
+        <member name="M:Notes.API.Controllers.UsersController.Create(Notes.Model.User)">
+            <summary>
+            Create new user
+            </summary>
+            <param name="user">user to create</param>
+            <returns>returns new user</returns>
+        </member>
+        <member name="M:Notes.API.Controllers.UsersController.Delete(System.Int32)">
+            <summary>
+            Delete user
+            </summary>
+            <param name="id">user id</param>
+        </member>
+    </members>
+</doc>
