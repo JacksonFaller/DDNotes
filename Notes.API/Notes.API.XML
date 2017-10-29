@@ -61,11 +61,12 @@
             <param name="note">note to create</param>
             <returns>returns new note</returns>
         </member>
-        <member name="M:Notes.API.Controllers.NotesController.Update(Notes.Model.Note)">
+        <member name="M:Notes.API.Controllers.NotesController.Update(Notes.API.UpdateNoteModel,System.Int32)">
             <summary>
             Update note
             </summary>
-            <param name="note">note to update</param>
+            <param name="noteModel">note to update</param>
+            <param name="id">note id</param>
             <returns>updated note</returns>
         </member>
         <member name="M:Notes.API.Controllers.NotesController.Delete(System.Int32)">
@@ -111,6 +112,18 @@
             Delete user
             </summary>
             <param name="id">user id</param>
+        </member>
+        <member name="T:Notes.API.ModelStateValidator">
+            <summary>
+            Валидатор состояния модели
+            </summary>
+        </member>
+        <member name="M:Notes.API.ModelStateValidator.Validate(System.Web.Http.ModelBinding.ModelStateDictionary)">
+            <summary>
+            Проверяет валидность модели
+            </summary>
+            <param name="modelState"></param>
+            <returns>Возвращает строку, содержащую ошибки в модели. Если ошибок нет возвращает null.</returns>
         </member>
     </members>
 </doc>

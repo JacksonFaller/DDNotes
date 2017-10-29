@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.ComTypes;
 using Notes.Model;
+using System.Text;
 
 namespace Notes.DataLayer.Sql
 {
@@ -52,7 +53,12 @@ namespace Notes.DataLayer.Sql
                 {
                     command.CommandText = "delete from Notes where Id = @id";
                     command.Parameters.AddWithValue("@id", id);
-                    command.ExecuteNonQuery();
+
+                    using (var reader = command.ExecuteReader())
+                    {
+                        if (!reader.Read())
+                            throw new ArgumentException($"Заметка с id: {id} не найдена");
+                    }
                 }
             }
         }
@@ -311,13 +317,53 @@ namespace Notes.DataLayer.Sql
                 using (var command = connection.CreateCommand())
                 {
                     note.ChangingDate = DateTime.Now;
-                    command.CommandText =
-                        "update Notes set Title = @title, Text = @text, [Changing date] = @date where Id = @id";
-                    command.Parameters.AddWithValue("@title", note.Title);
-                    command.Parameters.AddWithValue("@text", note.Text);
+                    StringBuilder commmandBuilder = new StringBuilder("update Notes set ");
+                    bool isTitleNull = note.Title == null, isTextNull = note.Text == null;
+                    if (isTitleNull && isTextNull)
+                        throw new ArgumentException("Ни один из параметров не был изменен, заметка не будет обновлена");
+
+                    StringBuilder outputParam = new StringBuilder("output inserted.[Creation date], inserted.Creator");
+                    if (isTitleNull)
+                    {
+                        outputParam.Append(", inserted.Title");
+                    }
+                    else
+                    {
+                        commmandBuilder.Append("Title = @title, ");
+                        command.Parameters.AddWithValue("@title", note.Title);
+                    }
+                    if (isTextNull)
+                    {
+                        outputParam.Append(", inserted.Text");
+                    }
+                    else
+                    {
+                        commmandBuilder.Append("Text = @text, ");
+                        command.Parameters.AddWithValue("@text", note.Text);
+                    }
+                    commmandBuilder.Append($"[Changing date] = @date {outputParam} where Id = @id");
+
+                    command.CommandText = commmandBuilder.ToString();
+                    
                     command.Parameters.AddWithValue("@date", note.ChangingDate);
                     command.Parameters.AddWithValue("@id", note.Id);
-                    command.ExecuteNonQuery();
+
+                    using (var reader = command.ExecuteReader())
+                    {
+                        if (!reader.Read())
+                            throw new ArgumentException($"Заметка с id: {note.Id} не найдена");
+
+                        note.CreationDate = reader.GetDateTime(reader.GetOrdinal("Creation date")).ToLocalTime();
+                        note.Creator = reader.GetInt32(reader.GetOrdinal("Creator"));
+                        if (isTitleNull)
+                            note.Title = reader.GetString(reader.GetOrdinal("Title"));
+                        if (isTextNull)
+                            note.Text = reader.GetString(reader.GetOrdinal("Text"));
+                        if (note.Categories == null)
+                            note.Categories = GetNoteCategories(note.Id);
+                        if(note.Shared == null)
+                        note.Shared = GetSharedUsers(note.Id);
+                    }
                     return note;
                 }
             }

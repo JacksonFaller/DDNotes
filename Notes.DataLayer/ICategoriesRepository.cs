@@ -8,6 +8,6 @@ namespace Notes.DataLayer
         Category Create(int userId, string name);
         void Delete(int id);
         Category Get(int id);
-        void Update(string name, int id);
+        Category Update(string name, int id);
     }
 }

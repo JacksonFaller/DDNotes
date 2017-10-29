@@ -20,7 +20,7 @@ namespace Notes.DataLayer.Sql
                 connection.Open();
                 using (var command = connection.CreateCommand())
                 {
-                    command.CommandText = "insert into Categories output Inserted.Id values (@userId, @name)";
+                    command.CommandText = "insert into Categories output inserted.Id values (@userId, @name)";
                     command.Parameters.AddWithValue("@userId", userId);
                     command.Parameters.AddWithValue("@name", name);
 
@@ -36,7 +36,6 @@ namespace Notes.DataLayer.Sql
                             Id = reader.GetInt32(reader.GetOrdinal("Id"))
                         };
                     }
-                    
                 }
             }
         }
@@ -80,6 +79,9 @@ namespace Notes.DataLayer.Sql
 
                     using (var reader = command.ExecuteReader())
                     {
+                        if (!reader.Read())
+                            throw new ArgumentException($"Категория с id: {id} не найдена");
+
                         return new Category
                         {
                             Id = id,
@@ -100,27 +102,38 @@ namespace Notes.DataLayer.Sql
                 {
                     command.CommandText = "delete from Categories where Id = @id";
                     command.Parameters.AddWithValue("@id", id);
-                    command.ExecuteNonQuery();
+
+                    using (var reader = command.ExecuteReader())
+                    {
+                        if (!reader.Read())
+                            throw new ArgumentException($"Категория с id: {id} не найдена");
+                    }
                 }
             }
         }
 
-        public void Update(string name, int id)
+        public Category Update(string name, int id)
         {
             using (var connection = new SqlConnection(_connectionString))
             {
                 connection.Open();
                 using (var command = connection.CreateCommand())
                 {
-                    command.CommandText = "update Categories set Name = @name where Id = @id";
+                    command.CommandText = "update Categories set Name = @name output inserted.UserId where Id = @id";
                     command.Parameters.AddWithValue("@name", name);
                     command.Parameters.AddWithValue("@id", id);
 
                     using (var reader = command.ExecuteReader())
                     {
                         if (!reader.Read())
-                            throw new ArgumentException($"Заметка с id: {id} не найдена");
-                        command.ExecuteNonQuery();
+                            throw new ArgumentException($"Категория с id: {id} не найдена");
+
+                        return new Category()
+                        {
+                            Id = id,
+                            Name = name,
+                            UserId = reader.GetInt32(reader.GetOrdinal("UserId"))
+                        };
                     }
                 }
             }

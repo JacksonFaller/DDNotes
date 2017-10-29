@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
+﻿using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using Notes.API.Filters;
 using Notes.DataLayer;
 using Notes.DataLayer.Sql;
 using Notes.Model;
@@ -32,8 +30,10 @@ namespace Notes.API.Controllers
         /// <returns>returns category if exists</returns>
         [HttpGet]
         [Route("api/categories/{id}")]
+        [ArgumentExceptionFilter]
         public Category Get(int id)
         {
+            Logger.Logger.Instatnce.Info($"Получение категории с id: {id}.");
             return _categoriesRepository.Get(id);
         }
 
@@ -46,7 +46,12 @@ namespace Notes.API.Controllers
         [Route("api/categories")]
         public Category Create([FromBody]Category category)
         {
-            return _categoriesRepository.Create(category.UserId, category.Name);
+            Logger.Logger.Instatnce.Info(
+                $"Создание категории с названием: {category.Name}, у пользователя {category.UserId}.");
+            string errors = ModelStateValidator.Validate(ModelState);
+            if (errors == null) return _categoriesRepository.Create(category.UserId, category.Name);
+            Logger.Logger.Instatnce.Error(errors);
+            throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.BadRequest, ModelState));
         }
 
         /// <summary>
@@ -56,9 +61,11 @@ namespace Notes.API.Controllers
         /// <param name="id">category id</param>
         [HttpPut]
         [Route("api/categories/{id}")]
-        public void Update([FromBody]string name, int id)
+        [ArgumentExceptionFilter]
+        public Category Update([FromBody]string name, int id)
         {
-            _categoriesRepository.Update(name, id);
+            Logger.Logger.Instatnce.Info($"Изменение категории с id: {id}. Новое название: {name}.");
+            return _categoriesRepository.Update(name, id);
         }
 
         /// <summary>
@@ -67,9 +74,11 @@ namespace Notes.API.Controllers
         /// <param name="id">category id</param>
         [HttpDelete]
         [Route("api/categories/{id}")]
+        [ArgumentExceptionFilter]
         public void Delete(int id)
         {
-            _categoriesRepository.Delete(id);
+            Logger.Logger.Instatnce.Info($"Удаление категории с id: {id}.");
+           _categoriesRepository.Delete(id);
         }
     }
 }

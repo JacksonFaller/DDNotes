@@ -1,12 +1,15 @@
-﻿using Notes.DataLayer;
-using Notes.DataLayer.Sql;
-using Notes.Model;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Runtime.Remoting.Messaging;
+using System.Text;
 using System.Web.Http;
+using Notes.DataLayer;
+using Notes.DataLayer.Sql;
+using Notes.Model;
+using Notes.API.Filters;
 
 namespace Notes.API.Controllers
 {
@@ -34,6 +37,7 @@ namespace Notes.API.Controllers
         [Route("api/users")]
         public IEnumerable<User> GetUsers()
         {
+            Logger.Logger.Instatnce.Info("Получение всех пользователей.");
             return _usersRepository.GetUsers();
         }
 
@@ -44,9 +48,12 @@ namespace Notes.API.Controllers
         /// <returns>returns user if exists</returns>
         [HttpGet]
         [Route("api/users/{id}")]
+        [ArgumentExceptionFilter]
         public User Get(int id)
         {
+            Logger.Logger.Instatnce.Info($"Получение пользователя с id: {id}.");
             return _usersRepository.Get(id);
+
         }
 
         /// <summary>
@@ -58,6 +65,7 @@ namespace Notes.API.Controllers
         [Route("api/users/{id}/categories")]
         public IEnumerable<Category> GetCategories(int id)
         {
+            Logger.Logger.Instatnce.Info($"Получение всех категорий пользователя с id: {id}.");
             return _usersRepository.GetCategories(id);
         }
 
@@ -70,7 +78,12 @@ namespace Notes.API.Controllers
         [Route("api/users")]
         public User Create([FromBody]User user)
         {
-            return _usersRepository.Create(user);
+            Logger.Logger.Instatnce.Info($"Создание пользователя с Именем: {user.Name} и Паролем: {user.Password?.GetHashCode()}.");
+            // Проверка валидности модели
+            string errors = ModelStateValidator.Validate(ModelState);
+            if (errors == null) return _usersRepository.Create(user);
+            Logger.Logger.Instatnce.Error(errors);
+            throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.BadRequest, ModelState));
         }
 
         /// <summary>
@@ -81,6 +94,7 @@ namespace Notes.API.Controllers
         [Route("api/users/{id}")]
         public void Delete(int id)
         {
+            Logger.Logger.Instatnce.Info($"Удаление пользователя с id: {id}.");
             _usersRepository.Delete(id);
         }
     }
