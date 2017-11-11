@@ -30,7 +30,7 @@ namespace Notes.API.Controllers
         /// <returns>returns category if exists</returns>
         [HttpGet]
         [Route("api/categories/{id}")]
-        [ArgumentExceptionFilter]
+        [ExceptionHandling]
         public Category Get(int id)
         {
             Logger.Logger.Instatnce.Info($"Получение категории с id: {id}.");
@@ -61,7 +61,7 @@ namespace Notes.API.Controllers
         /// <param name="id">category id</param>
         [HttpPut]
         [Route("api/categories/{id}")]
-        [ArgumentExceptionFilter]
+        [ExceptionHandling]
         public Category Update([FromBody]string name, int id)
         {
             Logger.Logger.Instatnce.Info($"Изменение категории с id: {id}. Новое название: {name}.");
@@ -74,7 +74,7 @@ namespace Notes.API.Controllers
         /// <param name="id">category id</param>
         [HttpDelete]
         [Route("api/categories/{id}")]
-        [ArgumentExceptionFilter]
+        [ExceptionHandling]
         public void Delete(int id)
         {
             Logger.Logger.Instatnce.Info($"Удаление категории с id: {id}.");

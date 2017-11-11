@@ -79,7 +79,7 @@ namespace Notes.DataLayer.Sql.Tests
                 _categoriesRepository.Create(user.Id, categoryName);
             }
 
-            var categories = _categoriesRepository.GetUsersCategories(user.Id).ToList();
+            var categories = _usersRepository.GetCategories(user.Id).ToList();
 
 
             Console.WriteLine("Found categories:");

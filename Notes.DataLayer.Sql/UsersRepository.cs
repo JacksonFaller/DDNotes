@@ -89,7 +89,7 @@ namespace Notes.DataLayer.Sql
                             Name = name,
                             Password = reader.GetString(reader.GetOrdinal("Password"))
                         };
-                        user.Categories = GetCategories(user.Id);
+                        user.Categories = _categoriesRepository.GetCategories(user.Id);
                         user.Notes = _notesRepository.GetUsersNotes(user.Id);
                         return user;
                     }
@@ -118,7 +118,7 @@ namespace Notes.DataLayer.Sql
                             Name = reader.GetString(reader.GetOrdinal("Name")),
                             Password = reader.GetString(reader.GetOrdinal("Password"))
                         };
-                        user.Categories = GetCategories(user.Id);
+                        user.Categories = _categoriesRepository.GetCategories(user.Id);
                         user.Notes = _notesRepository.GetUsersNotes(user.Id);
                         return user;
                     }
@@ -145,35 +145,9 @@ namespace Notes.DataLayer.Sql
                                 Name = reader.GetString(reader.GetOrdinal("Name")),
                                 Password = reader.GetString(reader.GetOrdinal("Password"))
                             };
-                            user.Categories = GetCategories(user.Id);
+                            user.Categories = _categoriesRepository.GetCategories(user.Id);
                             user.Notes = _notesRepository.GetUsersNotes(user.Id);
                             yield return user;
-                        }
-                    }
-                }
-            }
-        }
-
-        public IEnumerable<Category> GetCategories(int id)
-        {
-            using (SqlConnection connection = new SqlConnection(_connectionString))
-            {
-                connection.Open();
-                using (SqlCommand command = connection.CreateCommand())
-                {
-                    command.CommandText = "select Id, Name from Categories where UserId = @userId";
-                    command.Parameters.AddWithValue("@userId", id);
-
-                    using (var reader = command.ExecuteReader())
-                    {
-                        while (reader.Read())
-                        {
-                            yield return new Category()
-                            {
-                                Id = reader.GetInt32(reader.GetOrdinal("Id")),
-                                Name = reader.GetString(reader.GetOrdinal("Name")),
-                                UserId = id
-                            };
                         }
                     }
                 }

@@ -1,11 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net;
 using System.Net.Http;
-using System.Runtime.Remoting.Messaging;
-using System.Text;
 using System.Web.Http;
+using System.Collections.Generic;
 using Notes.DataLayer;
 using Notes.DataLayer.Sql;
 using Notes.Model;
@@ -22,11 +19,14 @@ namespace Notes.API.Controllers
             @"Data Source=JACKSONFALLERPC\SQLEXPRESS;Initial Catalog=NotesDB;Integrated Security=True";
 
         private readonly IUsersRepository _usersRepository;
+        private readonly INotesRepository _notesRepository;
+        private readonly ICategoriesRepository _categoriesRepository;
 
         public UsersController()
         {
-            _usersRepository = new UsersRepository(
-                ConnectionString, new CategoriesRepository(ConnectionString), new NotesRepository(ConnectionString));
+            _notesRepository = new NotesRepository(ConnectionString);
+            _categoriesRepository = new CategoriesRepository(ConnectionString);
+            _usersRepository = new UsersRepository(ConnectionString, _categoriesRepository, _notesRepository);
         }
 
         /// <summary>
@@ -48,12 +48,25 @@ namespace Notes.API.Controllers
         /// <returns>returns user if exists</returns>
         [HttpGet]
         [Route("api/users/{id}")]
-        [ArgumentExceptionFilter]
+        [ExceptionHandling]
         public User Get(int id)
         {
             Logger.Logger.Instatnce.Info($"Получение пользователя с id: {id}.");
             return _usersRepository.Get(id);
+        }
 
+        /// <summary>
+        /// Get user by name
+        /// </summary>
+        /// <param name="name">user name</param>
+        /// <returns>returns user if exists</returns>
+        [HttpGet]
+        [Route("api/users/byName/{name}")]
+        [ExceptionHandling]
+        public User Get(string name)
+        {
+            Logger.Logger.Instatnce.Info($"Получение пользователя с именем: {name}.");
+            return _usersRepository.Get(name);
         }
 
         /// <summary>
@@ -66,7 +79,33 @@ namespace Notes.API.Controllers
         public IEnumerable<Category> GetCategories(int id)
         {
             Logger.Logger.Instatnce.Info($"Получение всех категорий пользователя с id: {id}.");
-            return _usersRepository.GetCategories(id);
+            return _categoriesRepository.GetCategories(id);
+        }
+
+        /// <summary>
+        /// Get users notes
+        /// </summary>
+        /// <param name="id">user id</param>
+        /// <returns>users notes enumeration</returns>
+        [HttpGet]
+        [Route("api/users/{id}/notes")]
+        public IEnumerable<Note> GetNotes(int id)
+        {
+            Logger.Logger.Instatnce.Info($"Получение всех заметок пользователя с id: {id}.");
+            return _notesRepository.GetUsersNotes(id);
+        }
+
+        /// <summary>
+        /// Get users shared notes
+        /// </summary>
+        /// <param name="id">user id</param>
+        /// <returns>shared users notes enumeration</returns>
+        [HttpGet]
+        [Route("api/users/{id}/sharedNotes")]
+        public IEnumerable<Note> GetSharedNotes(int id)
+        {
+            Logger.Logger.Instatnce.Info($"Получение всех доступных заметок пользователю с id: {id}.");
+            return _notesRepository.GetSharedNotes(id);
         }
 
         /// <summary>
@@ -78,12 +117,34 @@ namespace Notes.API.Controllers
         [Route("api/users")]
         public User Create([FromBody]User user)
         {
-            Logger.Logger.Instatnce.Info($"Создание пользователя с Именем: {user.Name} и Паролем: {user.Password?.GetHashCode()}.");
+            Logger.Logger.Instatnce.Info($"Создание пользователя с Именем: {user.Name} и Паролем: {user.Password}.");
             // Проверка валидности модели
             string errors = ModelStateValidator.Validate(ModelState);
             if (errors == null) return _usersRepository.Create(user);
             Logger.Logger.Instatnce.Error(errors);
             throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.BadRequest, ModelState));
+        }
+
+        /// <summary>
+        /// Validate user
+        /// </summary>
+        /// <param name="user">user to validate</param>
+        /// <returns>true if user valid, otherwise false</returns>
+        [HttpPost]
+        [Route("api/users/validate")]
+        [ExceptionHandling]
+        public User Validate([FromBody]User user)
+        {
+            Logger.Logger.Instatnce.Info($"Валидация пользователя с именем: {user.Name} и паролем: {user.Password}.");
+            var resultUser = Get(user.Name);
+            if (user.Password.Equals(resultUser.Password, StringComparison.Ordinal))
+                return resultUser;
+            var response = new HttpResponseMessage(HttpStatusCode.Unauthorized)
+            {
+                Content = new StringContent("Неверное имя пользователя или пароль")
+            };
+            throw new HttpResponseException(response);
+
         }
 
         /// <summary>

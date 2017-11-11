@@ -5,7 +5,10 @@ using System.Web.Http.Filters;
 
 namespace Notes.API.Filters
 {
-    public class ArgumentExceptionFilterAttribute : ExceptionFilterAttribute
+    /// <summary>
+    /// Обработка исключений
+    /// </summary>
+    public class ExceptionHandling : ExceptionFilterAttribute
     {
         public override void OnException(HttpActionExecutedContext context)
         {

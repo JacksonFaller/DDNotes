@@ -41,12 +41,6 @@
             NotesRepository controller
             </summary>
         </member>
-        <member name="M:Notes.API.Controllers.NotesController.GetNotes">
-            <summary>
-            Get all notes
-            </summary>
-            <returns>returns notes enumeration</returns>
-        </member>
         <member name="M:Notes.API.Controllers.NotesController.Get(System.Int32)">
             <summary>
             Get note
@@ -61,11 +55,11 @@
             <param name="note">note to create</param>
             <returns>returns new note</returns>
         </member>
-        <member name="M:Notes.API.Controllers.NotesController.Update(Notes.API.UpdateNoteModel,System.Int32)">
+        <member name="M:Notes.API.Controllers.NotesController.Update(Notes.Model.Note,System.Int32)">
             <summary>
             Update note
             </summary>
-            <param name="noteModel">note to update</param>
+            <param name="note">note to update</param>
             <param name="id">note id</param>
             <returns>updated note</returns>
         </member>
@@ -74,6 +68,48 @@
             Delete note
             </summary>
             <param name="id">note id to delete</param>
+        </member>
+        <member name="M:Notes.API.Controllers.NotesController.Share(System.Int32,System.Int32)">
+            <summary>
+            Share note
+            </summary>
+            <param name="id">note id to share</param>
+            <param name="userId">shared user id</param>
+        </member>
+        <member name="M:Notes.API.Controllers.NotesController.Unshare(System.Int32,System.Int32)">
+            <summary>
+            Unshare note
+            </summary>
+            <param name="id">note id to unshare</param>
+            <param name="userId">unshared user id</param>
+        </member>
+        <member name="M:Notes.API.Controllers.NotesController.GetSharedUsers(System.Int32)">
+            <summary>
+            Get shared users
+            </summary>
+            <param name="id">note id</param>
+            <returns>enumeration of shared users</returns>
+        </member>
+        <member name="M:Notes.API.Controllers.NotesController.AddCategory(System.Int32,System.Int32)">
+            <summary>
+            Add category to note
+            </summary>
+            <param name="categoryId">category id to add to note</param>
+            <param name="noteId">note id</param>
+        </member>
+        <member name="M:Notes.API.Controllers.NotesController.RemoveCategory(System.Int32,System.Int32)">
+            <summary>
+            Remove category from note
+            </summary>
+            <param name="categoryId">category id to remove from note</param>
+            <param name="noteId">note id</param>
+        </member>
+        <member name="M:Notes.API.Controllers.NotesController.GetNoteCategories(System.Int32)">
+            <summary>
+            Get note categories
+            </summary>
+            <param name="id">note id</param>
+            <returns>enumeration of note categories</returns>
         </member>
         <member name="T:Notes.API.Controllers.UsersController">
             <summary>
@@ -93,12 +129,33 @@
             <param name="id">user id</param>
             <returns>returns user if exists</returns>
         </member>
+        <member name="M:Notes.API.Controllers.UsersController.Get(System.String)">
+            <summary>
+            Get user by name
+            </summary>
+            <param name="name">user name</param>
+            <returns>returns user if exists</returns>
+        </member>
         <member name="M:Notes.API.Controllers.UsersController.GetCategories(System.Int32)">
             <summary>
             Get users categories
             </summary>
             <param name="id">user id</param>
             <returns>users categories enumeration</returns>
+        </member>
+        <member name="M:Notes.API.Controllers.UsersController.GetNotes(System.Int32)">
+            <summary>
+            Get users notes
+            </summary>
+            <param name="id">user id</param>
+            <returns>users notes enumeration</returns>
+        </member>
+        <member name="M:Notes.API.Controllers.UsersController.GetSharedNotes(System.Int32)">
+            <summary>
+            Get users shared notes
+            </summary>
+            <param name="id">user id</param>
+            <returns>shared users notes enumeration</returns>
         </member>
         <member name="M:Notes.API.Controllers.UsersController.Create(Notes.Model.User)">
             <summary>
@@ -107,11 +164,23 @@
             <param name="user">user to create</param>
             <returns>returns new user</returns>
         </member>
+        <member name="M:Notes.API.Controllers.UsersController.Validate(Notes.Model.User)">
+            <summary>
+            Validate user
+            </summary>
+            <param name="user">user to validate</param>
+            <returns>true if user valid, otherwise false</returns>
+        </member>
         <member name="M:Notes.API.Controllers.UsersController.Delete(System.Int32)">
             <summary>
             Delete user
             </summary>
             <param name="id">user id</param>
+        </member>
+        <member name="T:Notes.API.Filters.ExceptionHandling">
+            <summary>
+            Обработка исключений
+            </summary>
         </member>
         <member name="T:Notes.API.ModelStateValidator">
             <summary>

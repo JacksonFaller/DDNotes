@@ -138,5 +138,31 @@ namespace Notes.DataLayer.Sql
                 }
             }
         }
+
+        public IEnumerable<Category> GetCategories(int id)
+        {
+            using (var connection = new SqlConnection(_connectionString))
+            {
+                connection.Open();
+                using (var command = connection.CreateCommand())
+                {
+                    command.CommandText = "select Id, Name from Categories where UserId = @userId";
+                    command.Parameters.AddWithValue("@userId", id);
+
+                    using (var reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            yield return new Category()
+                            {
+                                Id = reader.GetInt32(reader.GetOrdinal("Id")),
+                                Name = reader.GetString(reader.GetOrdinal("Name")),
+                                UserId = id
+                            };
+                        }
+                    }
+                }
+            }
+        }
     }
 }

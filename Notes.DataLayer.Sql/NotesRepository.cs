@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.IO;
 using System.Linq;
-using System.Runtime.InteropServices.ComTypes;
 using Notes.Model;
 using System.Text;
 
@@ -63,7 +62,7 @@ namespace Notes.DataLayer.Sql
             }
         }
 
-        public Note AddCategory(Note note, Category category)
+        public void AddCategory(int noteId, int categoryId)
         {
             using (var connection = new SqlConnection(_connectionString))
             {
@@ -71,16 +70,14 @@ namespace Notes.DataLayer.Sql
                 using (var command = connection.CreateCommand())
                 {
                     command.CommandText = "insert into NotesToCategories values (@categoryId, @noteId)";
-                    command.Parameters.AddWithValue("@categoryId", category.Id);
-                    command.Parameters.AddWithValue("@noteId", note.Id);
+                    command.Parameters.AddWithValue("@categoryId", categoryId);
+                    command.Parameters.AddWithValue("@noteId", noteId);
                     command.ExecuteNonQuery();
-                    note.Categories = note.Categories?.Concat(new[] {category}) ?? new[] {category};
-                    return note;
                 }
             }
         }
 
-        public Note RemoveCategory(Note note, Category category)
+        public void RemoveCategory(int noteId, int categoryId)
         {
             using (var connection = new SqlConnection(_connectionString))
             {
@@ -88,11 +85,9 @@ namespace Notes.DataLayer.Sql
                 using (var command = connection.CreateCommand())
                 {
                     command.CommandText = "delete from NotesToCategories where CategoryId = @categoryId and NoteId = @noteId";
-                    command.Parameters.AddWithValue("@categoryId", category.Id);
-                    command.Parameters.AddWithValue("@noteId", note.Id);
+                    command.Parameters.AddWithValue("@categoryId", categoryId);
+                    command.Parameters.AddWithValue("@noteId", noteId);
                     command.ExecuteNonQuery();
-                    note.Categories = note.Categories.Except(new[] {category});
-                    return note;
                 }
             }
         }
@@ -122,7 +117,7 @@ namespace Notes.DataLayer.Sql
                                 Creator = reader.GetInt32(reader.GetOrdinal("Creator"))
                             };
                             note.Categories = GetNoteCategories(note.Id);
-                            note.Shared = GetSharedUsers(note.Id);
+                            //note.Shared = GetSharedUsers(note.Id);
                             yield return note;
                         }
                     }
@@ -272,39 +267,8 @@ namespace Notes.DataLayer.Sql
                         Creator = reader.GetInt32(reader.GetOrdinal("Creator"))
                     };
                     note.Categories = GetNoteCategories(note.Id);
-                    note.Shared = GetSharedUsers(note.Id);
+                    //note.Shared = GetSharedUsers(note.Id);
                     return note;
-                }
-            }
-        }
-
-        public IEnumerable<Note> GetNotes()
-        {
-            using (var connection = new SqlConnection(_connectionString))
-            {
-                connection.Open();
-                using (var command = connection.CreateCommand())
-                {
-                    command.CommandText = "select * from Notes";
-
-                    using (var reader = command.ExecuteReader())
-                    {
-                        while (reader.Read())
-                        {
-                            Note note = new Note
-                            {
-                                Id = reader.GetInt32(reader.GetOrdinal("Id")),
-                                Title = reader.GetString(reader.GetOrdinal("Title")),
-                                Text = reader.GetString(reader.GetOrdinal("Text")),
-                                ChangingDate = reader.GetDateTime(reader.GetOrdinal("Changing date")),
-                                CreationDate = reader.GetDateTime(reader.GetOrdinal("Creation date")),
-                                Creator = reader.GetInt32(reader.GetOrdinal("Creator"))
-                            };
-                            note.Categories = GetNoteCategories(note.Id);
-                            note.Shared = GetSharedUsers(note.Id);
-                            yield return note;
-                        }
-                    }
                 }
             }
         }
@@ -319,8 +283,6 @@ namespace Notes.DataLayer.Sql
                     note.ChangingDate = DateTime.Now;
                     StringBuilder commmandBuilder = new StringBuilder("update Notes set ");
                     bool isTitleNull = note.Title == null, isTextNull = note.Text == null;
-                    if (isTitleNull && isTextNull)
-                        throw new ArgumentException("Ни один из параметров не был изменен, заметка не будет обновлена");
 
                     StringBuilder outputParam = new StringBuilder("output inserted.[Creation date], inserted.Creator");
                     if (isTitleNull)
@@ -359,10 +321,6 @@ namespace Notes.DataLayer.Sql
                             note.Title = reader.GetString(reader.GetOrdinal("Title"));
                         if (isTextNull)
                             note.Text = reader.GetString(reader.GetOrdinal("Text"));
-                        if (note.Categories == null)
-                            note.Categories = GetNoteCategories(note.Id);
-                        if(note.Shared == null)
-                        note.Shared = GetSharedUsers(note.Id);
                     }
                     return note;
                 }
@@ -384,7 +342,7 @@ namespace Notes.DataLayer.Sql
             }
         }
 
-        public void UnShare(int noteId, int userId)
+        public void Unshare(int noteId, int userId)
         {
             using (var connection = new SqlConnection(_connectionString))
             {

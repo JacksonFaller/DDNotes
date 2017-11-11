@@ -9,5 +9,6 @@ namespace Notes.DataLayer
         void Delete(int id);
         Category Get(int id);
         Category Update(string name, int id);
+        IEnumerable<Category> GetCategories(int userId);
     }
 }

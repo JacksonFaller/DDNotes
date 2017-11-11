@@ -8,7 +8,7 @@ namespace Notes.DataLayer
         User Create(User user);
         void Delete(int id);
         User Get(int id);
+        User Get(string name);
         IEnumerable<User> GetUsers();
-        IEnumerable<Category> GetCategories(int id);
     }
 }
