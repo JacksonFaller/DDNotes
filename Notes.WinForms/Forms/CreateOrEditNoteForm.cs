@@ -1,11 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using Notes.Model;
 
@@ -21,23 +16,23 @@ namespace Notes.WinForms.Forms
         private bool _isNoteTitleChanged;
 
         private readonly ServiceClient _serviceClient;
-        private readonly int _userId;
+        private readonly User _user;
         private readonly BindingList<Category> _categories = new BindingList<Category>();
 
-        public CreateOrEditNoteForm(ServiceClient client, int userId, Note note)
+        public CreateOrEditNoteForm(ServiceClient client, User user, Note note)
         {
             InitializeComponent();
             txtNoteTitle.Text = note.Title;
             txtNoteText.Text = note.Text;
             _serviceClient = client;
-            _userId = userId;
+            _user = user;
             Note = note;
             foreach (var category in note.Categories)
             {
                 _categories.Add(category);
             }
         }
-        public CreateOrEditNoteForm(ServiceClient client, int userId) : this(client, userId, new Note())
+        public CreateOrEditNoteForm(ServiceClient client, User user) : this(client, user, new Note())
         {
         }
 
@@ -69,7 +64,7 @@ namespace Notes.WinForms.Forms
 
         private void btnAddCategory_Click(object sender, EventArgs e)
         {
-            using (var form = new AddCategoryForm(_serviceClient, _userId))
+            using (var form = new AddCategoryForm(_user.Categories, _serviceClient, _user.Id))
             {
                 if (form.ShowDialog() != DialogResult.OK || form.SelectedCategoriesIndices.Count == 0) return;
                 foreach (var index in form.SelectedCategoriesIndices)

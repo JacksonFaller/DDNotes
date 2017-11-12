@@ -9,6 +9,6 @@ namespace Notes.Logger
 {
     public class Logger
     {
-        public static readonly NLog.Logger Instatnce = LogManager.GetCurrentClassLogger();
+        public static readonly NLog.Logger Instance = LogManager.GetCurrentClassLogger();
     }
 }

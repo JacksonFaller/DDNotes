@@ -40,6 +40,7 @@
             this.btnUpdateSharedNotes = new System.Windows.Forms.Button();
             this.btnFilter = new System.Windows.Forms.Button();
             this.btnClearFilter = new System.Windows.Forms.Button();
+            this.btnViewNote = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.DGListNotes)).BeginInit();
             this.SuspendLayout();
             // 
@@ -154,7 +155,7 @@
             // btnUpdateSharedNotes
             // 
             this.btnUpdateSharedNotes.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnUpdateSharedNotes.Location = new System.Drawing.Point(502, 262);
+            this.btnUpdateSharedNotes.Location = new System.Drawing.Point(558, 262);
             this.btnUpdateSharedNotes.Name = "btnUpdateSharedNotes";
             this.btnUpdateSharedNotes.Size = new System.Drawing.Size(105, 23);
             this.btnUpdateSharedNotes.TabIndex = 10;
@@ -170,6 +171,7 @@
             this.btnFilter.TabIndex = 11;
             this.btnFilter.Text = "Фильтр";
             this.btnFilter.UseVisualStyleBackColor = true;
+            this.btnFilter.Click += new System.EventHandler(this.btnFilter_Click);
             // 
             // btnClearFilter
             // 
@@ -177,14 +179,26 @@
             this.btnClearFilter.Name = "btnClearFilter";
             this.btnClearFilter.Size = new System.Drawing.Size(75, 23);
             this.btnClearFilter.TabIndex = 12;
-            this.btnClearFilter.Text = "Очистить";
+            this.btnClearFilter.Text = "Сбросить";
             this.btnClearFilter.UseVisualStyleBackColor = true;
+            this.btnClearFilter.Click += new System.EventHandler(this.btnClearFilter_Click);
+            // 
+            // btnViewNote
+            // 
+            this.btnViewNote.Location = new System.Drawing.Point(449, 262);
+            this.btnViewNote.Name = "btnViewNote";
+            this.btnViewNote.Size = new System.Drawing.Size(75, 23);
+            this.btnViewNote.TabIndex = 13;
+            this.btnViewNote.Text = "Просмотр";
+            this.btnViewNote.UseVisualStyleBackColor = true;
+            this.btnViewNote.Click += new System.EventHandler(this.btnViewNote_Click);
             // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(676, 335);
+            this.Controls.Add(this.btnViewNote);
             this.Controls.Add(this.btnClearFilter);
             this.Controls.Add(this.btnFilter);
             this.Controls.Add(this.btnUpdateSharedNotes);
@@ -220,6 +234,7 @@
         private System.Windows.Forms.Button btnUpdateSharedNotes;
         private System.Windows.Forms.Button btnFilter;
         private System.Windows.Forms.Button btnClearFilter;
+        private System.Windows.Forms.Button btnViewNote;
     }
 }
 

@@ -15,6 +15,7 @@ namespace Notes.WinForms.Forms
 
         private readonly BindingList<Note> _notes = new BindingList<Note>();
         private readonly BindingList<Note> _sharedNotes = new BindingList<Note>();
+        private readonly List<int> _filteredCategoriesIndices = new List<int>();
         private int _dgCategoriesColumnIndex;
 
         public MainForm()
@@ -34,6 +35,7 @@ namespace Notes.WinForms.Forms
                 _user = startfrom.CurrentUser;
             }
             _user.Notes = _serviceClient.GetNotes(_user.Id);
+            _user.Categories = _serviceClient.GetUserCategories(_user.Id);
             foreach (var note in _user.Notes)
             {
                 //note.Categories = _serviceClient.GetNoteCategories(note.Id);
@@ -54,7 +56,7 @@ namespace Notes.WinForms.Forms
 
         private void btnCreateNote_Click(object sender, EventArgs e)
         {
-            using (var form = new CreateOrEditNoteForm(_serviceClient, _user.Id))
+            using (var form = new CreateOrEditNoteForm(_serviceClient, _user))
             {
                 if (form.ShowDialog() == DialogResult.OK)
                 {
@@ -67,7 +69,7 @@ namespace Notes.WinForms.Forms
         private void btnEditNote_Click(object sender, EventArgs e)
         {
             int selected = DGListNotes.SelectedRows[0].Index;
-            using (var form = new CreateOrEditNoteForm(_serviceClient, _user.Id, _notes[selected]))
+            using (var form = new CreateOrEditNoteForm(_serviceClient, _user, _notes[selected]))
             {
                 form.Text = "Изменить заметку";
                 if (form.ShowDialog() != DialogResult.OK) return;
@@ -160,8 +162,50 @@ namespace Notes.WinForms.Forms
             var index = listSharedNotes.IndexFromPoint(e.Location);
             if (index != ListBox.NoMatches)
             {
-                new ViewNoteForm(_sharedNotes[listSharedNotes.SelectedIndex]).ShowDialog();
+                new ViewNoteForm(_sharedNotes[index]).ShowDialog();
             }
+        }
+
+        private void btnFilter_Click(object sender, EventArgs e)
+        {       
+            using (var form = new CategoriesFilterForm(_user.Categories,_filteredCategoriesIndices, _serviceClient, _user.Id))
+            {
+                if (form.ShowDialog() != DialogResult.OK) return;
+                if (form.SelectedCategoriestIndices.Count == 0)
+                {
+                    btnClearFilter_Click(sender, e);
+                    return;
+                }
+                DGListNotes.CurrentCell = null;
+                for (int i = 0; i < _notes.Count; i++)
+                {
+                    DGListNotes.Rows[i].Visible = false;
+                    foreach (var index in form.SelectedCategoriestIndices)
+                    {
+                        if (!_notes[i].Categories.Select(x => x.Id).Contains(form.Categories[index].Id)) continue;
+                        DGListNotes.Rows[i].Visible = true;
+                        break;
+                    }
+                }
+
+                _filteredCategoriesIndices.Clear();
+                _filteredCategoriesIndices.AddRange(form.SelectedCategoriestIndices);
+            }
+        }
+
+        private void btnClearFilter_Click(object sender, EventArgs e)
+        {
+            _filteredCategoriesIndices.Clear();
+            foreach (DataGridViewRow row in DGListNotes.Rows)
+            {
+                row.Visible = true;
+            }
+        }
+
+        private void btnViewNote_Click(object sender, EventArgs e)
+        {
+            if(listSharedNotes.SelectedIndex!= -1)
+                new ViewNoteForm(_sharedNotes[listSharedNotes.SelectedIndex]).ShowDialog();
         }
     }
 }

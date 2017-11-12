@@ -89,8 +89,8 @@ namespace Notes.DataLayer.Sql
                             Name = name,
                             Password = reader.GetString(reader.GetOrdinal("Password"))
                         };
-                        user.Categories = _categoriesRepository.GetCategories(user.Id);
-                        user.Notes = _notesRepository.GetUsersNotes(user.Id);
+                        //user.Categories = _categoriesRepository.GetCategories(user.Id);
+                        //user.Notes = _notesRepository.GetUsersNotes(user.Id);
                         return user;
                     }
                 }

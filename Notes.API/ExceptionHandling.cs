@@ -1,9 +1,11 @@
 ﻿using System;
+using System.Data.SqlClient;
 using System.Net;
 using System.Net.Http;
+using System.Web.Http;
 using System.Web.Http.Filters;
 
-namespace Notes.API.Filters
+namespace Notes.API
 {
     /// <summary>
     /// Обработка исключений
@@ -20,8 +22,43 @@ namespace Notes.API.Filters
                     {
                         Content = new StringContent(context.Exception.Message)
                     };
-                Logger.Logger.Instatnce.Error(
+                Logger.Logger.Instance.Error(
                     $"{context.Exception.StackTrace}{Environment.NewLine}{context.Exception.Message}");
+            }
+
+            SqlException ex = context.Exception as SqlException;
+            if (ex != null)
+                {
+                context.Response = new HttpResponseMessage(HttpStatusCode.InternalServerError);
+                string message;
+
+                switch (ex.Number)
+                {
+                    case 2:
+                    {
+                        message = "Отсутствует подключение к базе данных";
+                        break;
+                    }
+                    case -1:
+                    {
+                        message = "Ошибка поключения к базе данных. Сервер не найден или не доступен.";
+                        break;
+                    }
+
+                    case 2627:
+                    {
+                        message = "Такой элемент уже сушествует";
+                        break;
+                    }
+                    default:
+                    {
+                        message = $"Необработанная ошибка при обращении к базе данных:{Environment.NewLine}{ex.Message}";
+                        break;
+                    }
+                }
+
+                Logger.Logger.Instance.Error(context.Exception.Message);
+                context.Response.Content = new StringContent(message);
             }
         }
     }

@@ -33,6 +33,7 @@
             this.btnAddCategories = new System.Windows.Forms.Button();
             this.btnCancel = new System.Windows.Forms.Button();
             this.btnCreateCategory = new System.Windows.Forms.Button();
+            this.btnUpdateCategories = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // listCategories
@@ -85,6 +86,16 @@
             this.btnCreateCategory.UseVisualStyleBackColor = true;
             this.btnCreateCategory.Click += new System.EventHandler(this.btnCreateCategory_Click);
             // 
+            // btnUpdateCategories
+            // 
+            this.btnUpdateCategories.Location = new System.Drawing.Point(135, 185);
+            this.btnUpdateCategories.Name = "btnUpdateCategories";
+            this.btnUpdateCategories.Size = new System.Drawing.Size(75, 23);
+            this.btnUpdateCategories.TabIndex = 5;
+            this.btnUpdateCategories.Text = "Обновить";
+            this.btnUpdateCategories.UseVisualStyleBackColor = true;
+            this.btnUpdateCategories.Click += new System.EventHandler(this.btnUpdateCategories_Click);
+            // 
             // AddCategoryForm
             // 
             this.AcceptButton = this.btnAddCategories;
@@ -92,6 +103,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.btnCancel;
             this.ClientSize = new System.Drawing.Size(218, 258);
+            this.Controls.Add(this.btnUpdateCategories);
             this.Controls.Add(this.btnCreateCategory);
             this.Controls.Add(this.btnCancel);
             this.Controls.Add(this.btnAddCategories);
@@ -100,7 +112,6 @@
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.Name = "AddCategoryForm";
             this.Text = "Добавить категории";
-            this.Load += new System.EventHandler(this.AddCategoryForm_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -113,5 +124,6 @@
         private System.Windows.Forms.Button btnAddCategories;
         private System.Windows.Forms.Button btnCancel;
         private System.Windows.Forms.Button btnCreateCategory;
+        private System.Windows.Forms.Button btnUpdateCategories;
     }
 }

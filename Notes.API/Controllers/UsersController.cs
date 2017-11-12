@@ -37,7 +37,7 @@ namespace Notes.API.Controllers
         [Route("api/users")]
         public IEnumerable<User> GetUsers()
         {
-            Logger.Logger.Instatnce.Info("Получение всех пользователей.");
+            Logger.Logger.Instance.Info("Получение всех пользователей.");
             return _usersRepository.GetUsers();
         }
 
@@ -51,7 +51,7 @@ namespace Notes.API.Controllers
         [ExceptionHandling]
         public User Get(int id)
         {
-            Logger.Logger.Instatnce.Info($"Получение пользователя с id: {id}.");
+            Logger.Logger.Instance.Info($"Получение пользователя с id: {id}.");
             return _usersRepository.Get(id);
         }
 
@@ -65,7 +65,7 @@ namespace Notes.API.Controllers
         [ExceptionHandling]
         public User Get(string name)
         {
-            Logger.Logger.Instatnce.Info($"Получение пользователя с именем: {name}.");
+            Logger.Logger.Instance.Info($"Получение пользователя с именем: {name}.");
             return _usersRepository.Get(name);
         }
 
@@ -78,7 +78,7 @@ namespace Notes.API.Controllers
         [Route("api/users/{id}/categories")]
         public IEnumerable<Category> GetCategories(int id)
         {
-            Logger.Logger.Instatnce.Info($"Получение всех категорий пользователя с id: {id}.");
+            Logger.Logger.Instance.Info($"Получение всех категорий пользователя с id: {id}.");
             return _categoriesRepository.GetCategories(id);
         }
 
@@ -91,7 +91,7 @@ namespace Notes.API.Controllers
         [Route("api/users/{id}/notes")]
         public IEnumerable<Note> GetNotes(int id)
         {
-            Logger.Logger.Instatnce.Info($"Получение всех заметок пользователя с id: {id}.");
+            Logger.Logger.Instance.Info($"Получение всех заметок пользователя с id: {id}.");
             return _notesRepository.GetUsersNotes(id);
         }
 
@@ -104,7 +104,7 @@ namespace Notes.API.Controllers
         [Route("api/users/{id}/sharedNotes")]
         public IEnumerable<Note> GetSharedNotes(int id)
         {
-            Logger.Logger.Instatnce.Info($"Получение всех доступных заметок пользователю с id: {id}.");
+            Logger.Logger.Instance.Info($"Получение всех доступных заметок пользователю с id: {id}.");
             return _notesRepository.GetSharedNotes(id);
         }
 
@@ -117,11 +117,11 @@ namespace Notes.API.Controllers
         [Route("api/users")]
         public User Create([FromBody]User user)
         {
-            Logger.Logger.Instatnce.Info($"Создание пользователя с Именем: {user.Name} и Паролем: {user.Password}.");
+            Logger.Logger.Instance.Info($"Создание пользователя с Именем: {user.Name} и Паролем: {user.Password}.");
             // Проверка валидности модели
             string errors = ModelStateValidator.Validate(ModelState);
             if (errors == null) return _usersRepository.Create(user);
-            Logger.Logger.Instatnce.Error(errors);
+            Logger.Logger.Instance.Error(errors);
             throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.BadRequest, ModelState));
         }
 
@@ -135,7 +135,7 @@ namespace Notes.API.Controllers
         [ExceptionHandling]
         public User Validate([FromBody]User user)
         {
-            Logger.Logger.Instatnce.Info($"Валидация пользователя с именем: {user.Name} и паролем: {user.Password}.");
+            Logger.Logger.Instance.Info($"Валидация пользователя с именем: {user.Name} и паролем: {user.Password}.");
             var resultUser = Get(user.Name);
             if (user.Password.Equals(resultUser.Password, StringComparison.Ordinal))
                 return resultUser;
@@ -155,7 +155,7 @@ namespace Notes.API.Controllers
         [Route("api/users/{id}")]
         public void Delete(int id)
         {
-            Logger.Logger.Instatnce.Info($"Удаление пользователя с id: {id}.");
+            Logger.Logger.Instance.Info($"Удаление пользователя с id: {id}.");
             _usersRepository.Delete(id);
         }
     }

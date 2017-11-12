@@ -33,7 +33,7 @@ namespace Notes.API.Controllers
         [ExceptionHandling]
         public Category Get(int id)
         {
-            Logger.Logger.Instatnce.Info($"Получение категории с id: {id}.");
+            Logger.Logger.Instance.Info($"Получение категории с id: {id}.");
             return _categoriesRepository.Get(id);
         }
 
@@ -46,11 +46,11 @@ namespace Notes.API.Controllers
         [Route("api/categories")]
         public Category Create([FromBody]Category category)
         {
-            Logger.Logger.Instatnce.Info(
+            Logger.Logger.Instance.Info(
                 $"Создание категории с названием: {category.Name}, у пользователя {category.UserId}.");
             string errors = ModelStateValidator.Validate(ModelState);
             if (errors == null) return _categoriesRepository.Create(category.UserId, category.Name);
-            Logger.Logger.Instatnce.Error(errors);
+            Logger.Logger.Instance.Error(errors);
             throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.BadRequest, ModelState));
         }
 
@@ -64,7 +64,7 @@ namespace Notes.API.Controllers
         [ExceptionHandling]
         public Category Update([FromBody]string name, int id)
         {
-            Logger.Logger.Instatnce.Info($"Изменение категории с id: {id}. Новое название: {name}.");
+            Logger.Logger.Instance.Info($"Изменение категории с id: {id}. Новое название: {name}.");
             return _categoriesRepository.Update(name, id);
         }
 
@@ -77,7 +77,7 @@ namespace Notes.API.Controllers
         [ExceptionHandling]
         public void Delete(int id)
         {
-            Logger.Logger.Instatnce.Info($"Удаление категории с id: {id}.");
+            Logger.Logger.Instance.Info($"Удаление категории с id: {id}.");
            _categoriesRepository.Delete(id);
         }
     }

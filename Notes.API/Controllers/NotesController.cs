@@ -1,6 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Net;
-using System.Net.Http;
 using System.Web.Http;
 using Notes.API.Filters;
 using Notes.DataLayer;
@@ -34,7 +32,7 @@ namespace Notes.API.Controllers
         [ExceptionHandling]
         public Note Get(int id)
         {
-            Logger.Logger.Instatnce.Info($"Получение заметки с id: {id}.");
+            Logger.Logger.Instance.Info($"Получение заметки с id: {id}.");
             return _notesRepository.Get(id);
         }
 
@@ -47,7 +45,7 @@ namespace Notes.API.Controllers
         [Route("api/notes")]
         public Note Create([FromBody]Note note)
         {
-            Logger.Logger.Instatnce.Info(
+            Logger.Logger.Instance.Info(
                 $"Создание заметки. Заголовок: {note.Title}, Текст: {note.Text}, Создатель: {note.Creator}.");
             return _notesRepository.Create(note);
             //throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.BadRequest, ModelState));
@@ -64,7 +62,7 @@ namespace Notes.API.Controllers
         [ExceptionHandling]
         public Note Update([FromBody]Note note, int id)
         {
-            Logger.Logger.Instatnce.Info(
+            Logger.Logger.Instance.Info(
                 $"Изменение заметки с id: {id}. Новые - Заголовок: {note.Title}, Текст: {note.Text}.");
             note.Id = id;
             return _notesRepository.Update(note);
@@ -79,7 +77,7 @@ namespace Notes.API.Controllers
         [ExceptionHandling]
         public void Delete(int id)
         {
-            Logger.Logger.Instatnce.Info($"Удалеие заметки с id: {id}.");
+            Logger.Logger.Instance.Info($"Удалеие заметки с id: {id}.");
            _notesRepository.Delete(id);
         }
 
@@ -93,7 +91,7 @@ namespace Notes.API.Controllers
         [ExceptionHandling]
         public void Share(int id, int userId)
         {
-            Logger.Logger.Instatnce.Info($"Поделиться заметкой с id: {id} с пользователем {userId}");
+            Logger.Logger.Instance.Info($"Поделиться заметкой с id: {id} с пользователем {userId}");
             _notesRepository.Share(id, userId);
         }
 
@@ -107,7 +105,7 @@ namespace Notes.API.Controllers
         [ExceptionHandling]
         public void Unshare(int id, int userId)
         {
-            Logger.Logger.Instatnce.Info($"Скрыть заметку заметку с id: {id} от пользователя {userId}");
+            Logger.Logger.Instance.Info($"Скрыть заметку заметку с id: {id} от пользователя {userId}");
             _notesRepository.Unshare(id, userId);
         }
 
@@ -121,7 +119,7 @@ namespace Notes.API.Controllers
         [ExceptionHandling]
         public IEnumerable<User> GetSharedUsers(int id)
         {
-            Logger.Logger.Instatnce.Info($"Получение общих пользователей заметки с id: {id}.");
+            Logger.Logger.Instance.Info($"Получение общих пользователей заметки с id: {id}.");
             return _notesRepository.GetSharedUsers(id);
         }
 
@@ -135,7 +133,7 @@ namespace Notes.API.Controllers
         [ExceptionHandling]
         public void AddCategory([FromBody]int categoryId, int noteId)
         {
-            Logger.Logger.Instatnce.Info(
+            Logger.Logger.Instance.Info(
                 $"Добавлении категории с id: {categoryId} к заметке с id: {noteId}.");
             _notesRepository.AddCategory(noteId, categoryId);
         }
@@ -150,7 +148,7 @@ namespace Notes.API.Controllers
         [ExceptionHandling]
         public void RemoveCategory([FromBody]int categoryId, int noteId)
         {
-            Logger.Logger.Instatnce.Info(
+            Logger.Logger.Instance.Info(
                 $"Добавлении категории с id: {categoryId} к заметке с id: {noteId}.");
             _notesRepository.RemoveCategory(noteId, categoryId);
         }
@@ -165,7 +163,7 @@ namespace Notes.API.Controllers
         [ExceptionHandling]
         public IEnumerable<Category> GetNoteCategories(int id)
         {
-            Logger.Logger.Instatnce.Info($"Получение категорий заметки с id: {id}.");
+            Logger.Logger.Instance.Info($"Получение категорий заметки с id: {id}.");
             return _notesRepository.GetNoteCategories(id);
         }
     }
