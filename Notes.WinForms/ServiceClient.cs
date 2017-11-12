@@ -72,6 +72,13 @@ namespace Notes.WinForms
             return ResponseParse<Category>(response);
         }
 
+        public void DeleteCategory(int id)
+        {
+            var response = _client.DeleteAsync($"categories/{id}").Result;
+            if (!response.IsSuccessStatusCode)
+                throw new HttpRequestException(response.Content.ReadAsStringAsync().Result);
+        }
+
         public void ShareNote(int noteId, int userId)
         {
             var response = _client.PostAsJsonAsync($"notes/{noteId}/share/{userId}", string.Empty).Result;

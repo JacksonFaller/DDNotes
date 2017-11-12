@@ -1,7 +1,6 @@
 ﻿using System.Net;
 using System.Net.Http;
 using System.Web.Http;
-using Notes.API.Filters;
 using Notes.DataLayer;
 using Notes.DataLayer.Sql;
 using Notes.Model;

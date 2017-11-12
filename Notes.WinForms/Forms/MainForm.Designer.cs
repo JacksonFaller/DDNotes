@@ -41,6 +41,8 @@
             this.btnFilter = new System.Windows.Forms.Button();
             this.btnClearFilter = new System.Windows.Forms.Button();
             this.btnViewNote = new System.Windows.Forms.Button();
+            this.btnShowCategories = new System.Windows.Forms.Button();
+            this.btnExit = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.DGListNotes)).BeginInit();
             this.SuspendLayout();
             // 
@@ -72,14 +74,14 @@
             this.listSharedNotes.FormattingEnabled = true;
             this.listSharedNotes.Location = new System.Drawing.Point(449, 33);
             this.listSharedNotes.Name = "listSharedNotes";
-            this.listSharedNotes.Size = new System.Drawing.Size(214, 212);
+            this.listSharedNotes.Size = new System.Drawing.Size(214, 225);
             this.listSharedNotes.TabIndex = 3;
             this.listSharedNotes.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.listSharedNotes_DoubleClick);
             // 
             // btnCreateNote
             // 
             this.btnCreateNote.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
-            this.btnCreateNote.Location = new System.Drawing.Point(12, 296);
+            this.btnCreateNote.Location = new System.Drawing.Point(11, 300);
             this.btnCreateNote.Name = "btnCreateNote";
             this.btnCreateNote.Size = new System.Drawing.Size(93, 23);
             this.btnCreateNote.TabIndex = 4;
@@ -90,7 +92,7 @@
             // btnShareNote
             // 
             this.btnShareNote.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
-            this.btnShareNote.Location = new System.Drawing.Point(273, 296);
+            this.btnShareNote.Location = new System.Drawing.Point(272, 300);
             this.btnShareNote.Name = "btnShareNote";
             this.btnShareNote.Size = new System.Drawing.Size(77, 23);
             this.btnShareNote.TabIndex = 5;
@@ -101,7 +103,7 @@
             // btnEditNote
             // 
             this.btnEditNote.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
-            this.btnEditNote.Location = new System.Drawing.Point(111, 296);
+            this.btnEditNote.Location = new System.Drawing.Point(110, 300);
             this.btnEditNote.Name = "btnEditNote";
             this.btnEditNote.Size = new System.Drawing.Size(75, 23);
             this.btnEditNote.TabIndex = 6;
@@ -112,7 +114,7 @@
             // btnDeleteNote
             // 
             this.btnDeleteNote.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
-            this.btnDeleteNote.Location = new System.Drawing.Point(192, 296);
+            this.btnDeleteNote.Location = new System.Drawing.Point(191, 300);
             this.btnDeleteNote.Name = "btnDeleteNote";
             this.btnDeleteNote.Size = new System.Drawing.Size(75, 23);
             this.btnDeleteNote.TabIndex = 7;
@@ -123,7 +125,7 @@
             // btnUnshareNote
             // 
             this.btnUnshareNote.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
-            this.btnUnshareNote.Location = new System.Drawing.Point(356, 296);
+            this.btnUnshareNote.Location = new System.Drawing.Point(354, 300);
             this.btnUnshareNote.Name = "btnUnshareNote";
             this.btnUnshareNote.Size = new System.Drawing.Size(75, 23);
             this.btnUnshareNote.TabIndex = 8;
@@ -147,7 +149,7 @@
             this.DGListNotes.RowHeadersVisible = false;
             this.DGListNotes.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders;
             this.DGListNotes.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.DGListNotes.Size = new System.Drawing.Size(418, 251);
+            this.DGListNotes.Size = new System.Drawing.Size(418, 253);
             this.DGListNotes.TabIndex = 9;
             this.DGListNotes.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.listNotes_DoubleClick);
             this.DGListNotes.DataBindingComplete += new System.Windows.Forms.DataGridViewBindingCompleteEventHandler(this.listNotes_DataBindingComplete);
@@ -155,11 +157,11 @@
             // btnUpdateSharedNotes
             // 
             this.btnUpdateSharedNotes.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnUpdateSharedNotes.Location = new System.Drawing.Point(558, 262);
+            this.btnUpdateSharedNotes.Location = new System.Drawing.Point(588, 264);
             this.btnUpdateSharedNotes.Name = "btnUpdateSharedNotes";
-            this.btnUpdateSharedNotes.Size = new System.Drawing.Size(105, 23);
+            this.btnUpdateSharedNotes.Size = new System.Drawing.Size(75, 23);
             this.btnUpdateSharedNotes.TabIndex = 10;
-            this.btnUpdateSharedNotes.Text = "Обновить список";
+            this.btnUpdateSharedNotes.Text = "Обновить";
             this.btnUpdateSharedNotes.UseVisualStyleBackColor = true;
             this.btnUpdateSharedNotes.Click += new System.EventHandler(this.btnUpdateSharedNotes_Click);
             // 
@@ -185,7 +187,7 @@
             // 
             // btnViewNote
             // 
-            this.btnViewNote.Location = new System.Drawing.Point(449, 262);
+            this.btnViewNote.Location = new System.Drawing.Point(449, 264);
             this.btnViewNote.Name = "btnViewNote";
             this.btnViewNote.Size = new System.Drawing.Size(75, 23);
             this.btnViewNote.TabIndex = 13;
@@ -193,11 +195,33 @@
             this.btnViewNote.UseVisualStyleBackColor = true;
             this.btnViewNote.Click += new System.EventHandler(this.btnViewNote_Click);
             // 
+            // btnShowCategories
+            // 
+            this.btnShowCategories.Location = new System.Drawing.Point(191, 7);
+            this.btnShowCategories.Name = "btnShowCategories";
+            this.btnShowCategories.Size = new System.Drawing.Size(75, 23);
+            this.btnShowCategories.TabIndex = 14;
+            this.btnShowCategories.Text = "Категории";
+            this.btnShowCategories.UseVisualStyleBackColor = true;
+            this.btnShowCategories.Click += new System.EventHandler(this.btnShowCategories_Click);
+            // 
+            // btnExit
+            // 
+            this.btnExit.Location = new System.Drawing.Point(589, 300);
+            this.btnExit.Name = "btnExit";
+            this.btnExit.Size = new System.Drawing.Size(75, 23);
+            this.btnExit.TabIndex = 15;
+            this.btnExit.Text = "Выход";
+            this.btnExit.UseVisualStyleBackColor = true;
+            this.btnExit.Click += new System.EventHandler(this.btnExit_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(676, 335);
+            this.Controls.Add(this.btnExit);
+            this.Controls.Add(this.btnShowCategories);
             this.Controls.Add(this.btnViewNote);
             this.Controls.Add(this.btnClearFilter);
             this.Controls.Add(this.btnFilter);
@@ -235,6 +259,8 @@
         private System.Windows.Forms.Button btnFilter;
         private System.Windows.Forms.Button btnClearFilter;
         private System.Windows.Forms.Button btnViewNote;
+        private System.Windows.Forms.Button btnShowCategories;
+        private System.Windows.Forms.Button btnExit;
     }
 }
 

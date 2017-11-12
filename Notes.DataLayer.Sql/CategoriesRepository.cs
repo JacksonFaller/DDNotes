@@ -100,7 +100,7 @@ namespace Notes.DataLayer.Sql
                 connection.Open();
                 using (var command = connection.CreateCommand())
                 {
-                    command.CommandText = "delete from Categories where Id = @id";
+                    command.CommandText = "delete from Categories output deleted.Id where Id = @id";
                     command.Parameters.AddWithValue("@id", id);
 
                     using (var reader = command.ExecuteReader())

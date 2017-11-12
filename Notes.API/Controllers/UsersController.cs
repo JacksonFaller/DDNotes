@@ -6,7 +6,6 @@ using System.Collections.Generic;
 using Notes.DataLayer;
 using Notes.DataLayer.Sql;
 using Notes.Model;
-using Notes.API.Filters;
 
 namespace Notes.API.Controllers
 {

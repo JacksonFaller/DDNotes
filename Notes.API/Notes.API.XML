@@ -177,7 +177,7 @@
             </summary>
             <param name="id">user id</param>
         </member>
-        <member name="T:Notes.API.Filters.ExceptionHandling">
+        <member name="T:Notes.API.ExceptionHandling">
             <summary>
             Обработка исключений
             </summary>

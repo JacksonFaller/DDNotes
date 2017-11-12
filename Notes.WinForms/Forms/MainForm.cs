@@ -207,5 +207,46 @@ namespace Notes.WinForms.Forms
             if(listSharedNotes.SelectedIndex!= -1)
                 new ViewNoteForm(_sharedNotes[listSharedNotes.SelectedIndex]).ShowDialog();
         }
+
+        private void btnExit_Click(object sender, EventArgs e)
+        {
+            Close();
+        }
+
+        private void btnShowCategories_Click(object sender, EventArgs e)
+        {
+            using (var form = new CategoriesForm(_user.Categories, _user.Id, _serviceClient))
+            {
+                form.ShowDialog();
+                _user.Categories = form.Categories;
+                if (form.RemovedCategoiesIds.Count != 0)
+                {
+                    for (int i = 0; i < _notes.Count; i++)
+                    {
+                        var result = _notes[i].Categories.Except(form.RemovedCategoiesIds, new CategoriesComparer()).ToList();
+                        if (result.Count < _notes[i].Categories.Count())
+                        {
+                            _notes[i].Categories = result;
+                            SetCellComboBoxItems(DGListNotes, i, _dgCategoriesColumnIndex, 
+                                result.Select(x => x.Name));
+                        }
+                    }
+                }
+            }
+
+        }
+
+        public class CategoriesComparer : IEqualityComparer<Category>
+        {
+            public bool Equals(Category x, Category y)
+            {
+                return x?.Id == y?.Id;
+            }
+
+            public int GetHashCode(Category category)
+            {
+                return category.GetHashCode();
+            }
+        }
     }
 }
