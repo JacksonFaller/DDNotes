@@ -8,7 +8,7 @@ namespace Notes.DataLayer
     {
         Note Create(Note note);
         void Delete(int id);
-        IEnumerable<Note> GetUsersNotes(int userId);
+        IEnumerable<Note> GetUserNotes(int userId);
         IEnumerable<User> GetSharedUsers(int noteId);
         IEnumerable<Note> GetSharedNotes(int userId);
         IEnumerable<Category> GetNoteCategories(int noteId);

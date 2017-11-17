@@ -61,13 +61,9 @@ namespace Notes.DataLayer.Sql
                 connection.Open();
                 using (var command = connection.CreateCommand())
                 {
-                    command.CommandText = "delete from Users ouput deleted.Id where Id = @id";
+                    command.CommandText = "delete from Users where Id = @id";
                     command.Parameters.AddWithValue("@id", id);
-                    using (var reader = command.ExecuteReader())
-                    {
-                        if (!reader.Read())
-                            throw new ArgumentException($"Пользователь с id: {id} не найден");
-                    }
+                    command.ExecuteNonQuery();
                 }
             }
         }
@@ -94,7 +90,7 @@ namespace Notes.DataLayer.Sql
                             Password = reader.GetString(reader.GetOrdinal("Password"))
                         };
                         //user.Categories = _categoriesRepository.GetCategories(user.Id);
-                        //user.Notes = _notesRepository.GetUsersNotes(user.Id);
+                        //user.Notes = _notesRepository.GetUserNotes(user.Id);
                         return user;
                     }
                 }
@@ -123,7 +119,7 @@ namespace Notes.DataLayer.Sql
                             Password = reader.GetString(reader.GetOrdinal("Password"))
                         };
                         user.Categories = _categoriesRepository.GetCategories(user.Id);
-                        user.Notes = _notesRepository.GetUsersNotes(user.Id);
+                        user.Notes = _notesRepository.GetUserNotes(user.Id);
                         return user;
                     }
                 }
@@ -150,7 +146,7 @@ namespace Notes.DataLayer.Sql
                                 Password = reader.GetString(reader.GetOrdinal("Password"))
                             };
                             user.Categories = _categoriesRepository.GetCategories(user.Id);
-                            user.Notes = _notesRepository.GetUsersNotes(user.Id);
+                            user.Notes = _notesRepository.GetUserNotes(user.Id);
                             yield return user;
                         }
                     }

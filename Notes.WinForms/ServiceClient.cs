@@ -28,7 +28,7 @@ namespace Notes.WinForms
             return ResponseParse<User>(response);
         }
 
-        public IEnumerable<Note> GetNotes(int userId)
+        public IEnumerable<Note> GetUserNotes(int userId)
         {
             var response = _client.GetAsync($"users/{userId}/notes").Result;
             return ResponseParse<IEnumerable<Note>>(response);
@@ -69,6 +69,12 @@ namespace Notes.WinForms
         {
             var category = new Category {Name = name, UserId = userId};
             var response = _client.PostAsJsonAsync("categories", category).Result;
+            return ResponseParse<Category>(response);
+        }
+
+        public Category UpdateCategory(int id, string name)
+        {
+            var response = _client.PutAsJsonAsync($"categories/{id}", name).Result;
             return ResponseParse<Category>(response);
         }
 

@@ -12,8 +12,8 @@ namespace Notes.WinForms.Forms
         public List<Category> AddedCategories = new List<Category>();
         public List<Category> RemovedCategories = new List<Category>();
 
-        private bool _isNoteTextChanged;
-        private bool _isNoteTitleChanged;
+        public bool IsNoteTextChanged;
+        public bool IsNoteTitleChanged;
 
         private readonly ServiceClient _serviceClient;
         private readonly User _user;
@@ -22,23 +22,23 @@ namespace Notes.WinForms.Forms
         public CreateOrEditNoteForm(ServiceClient client, User user, Note note)
         {
             InitializeComponent();
+            _user = user;
+            _serviceClient = client;
             txtNoteTitle.Text = note.Title;
             txtNoteText.Text = note.Text;
-            _serviceClient = client;
-            _user = user;
             Note = note;
+            if(note.Categories == null) return;
             foreach (var category in note.Categories)
             {
                 _categories.Add(category);
             }
         }
-        public CreateOrEditNoteForm(ServiceClient client, User user) : this(client, user, new Note())
+        public CreateOrEditNoteForm(ServiceClient client, User user): this(client, user, new Note())
         {
         }
 
         private void btnSaveNote_Click(object sender, EventArgs e)
         {
-            if (!_isNoteTitleChanged && !_isNoteTextChanged) return;
             if (txtNoteTitle.Text.Length == 0 || txtNoteText.Text.Length == 0)
             {
                 MessageBox.Show("Поля 'Заголовок' и 'Текст' не могут быть пустыми", "Внимение",
@@ -47,24 +47,25 @@ namespace Notes.WinForms.Forms
                 DialogResult = DialogResult.None;
                 return;
             }
-            Note.Title = _isNoteTitleChanged ? txtNoteTitle.Text : null;
-            Note.Text = _isNoteTextChanged ? txtNoteText.Text : null;
+            if (!IsNoteTitleChanged && !IsNoteTextChanged) return;
+            Note.Title = IsNoteTitleChanged ? txtNoteTitle.Text : null;
+            Note.Text = IsNoteTextChanged ? txtNoteText.Text : null;
             Note.Categories = _categories;
         }
 
         private void txtNoteTitle_TextChanged(object sender, EventArgs e)
         {
-            _isNoteTitleChanged = true;
+            IsNoteTitleChanged = true;
         }
 
         private void txtNoteText_TextChanged(object sender, EventArgs e)
         {
-            _isNoteTextChanged = true;
+            IsNoteTextChanged = true;
         }
 
         private void btnAddCategory_Click(object sender, EventArgs e)
         {
-            using (var form = new AddCategoryForm(_user.Categories, _serviceClient, _user.Id))
+            using (var form = new AddCategoryForm(_categories, _serviceClient, _user))
             {
                 if (form.ShowDialog() != DialogResult.OK || form.SelectedCategoriesIndices.Count == 0) return;
                 foreach (var index in form.SelectedCategoriesIndices)

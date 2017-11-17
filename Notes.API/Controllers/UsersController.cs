@@ -91,7 +91,7 @@ namespace Notes.API.Controllers
         public IEnumerable<Note> GetNotes(int id)
         {
             Logger.Logger.Instance.Info($"Получение всех заметок пользователя с id: {id}.");
-            return _notesRepository.GetUsersNotes(id);
+            return _notesRepository.GetUserNotes(id);
         }
 
         /// <summary>

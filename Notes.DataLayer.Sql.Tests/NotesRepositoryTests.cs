@@ -71,7 +71,7 @@ namespace Notes.DataLayer.Sql.Tests
                 notesId.Add(note.Id);
             }
 
-            var usersNotes = _notesRepository.GetUsersNotes(user.Id).ToList();
+            var usersNotes = _notesRepository.GetUserNotes(user.Id).ToList();
 
             Console.WriteLine("Found note ids:");
             if (usersNotes.Count != notesId.Count)

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
 using System.Windows.Forms;
 using Notes.Model;
 
@@ -9,20 +10,22 @@ namespace Notes.WinForms.Forms
     internal partial class AddCategoryForm : Form
     {
         private readonly ServiceClient _serviceClient;
-        private readonly int _userId;
+        private readonly User _user;
+        private readonly IEnumerable<Category> _noteCategories;
 
         public BindingList<Category> Categories = new BindingList<Category>();
         public List<int> SelectedCategoriesIndices = new List<int>();
 
-        public AddCategoryForm(IEnumerable<Category> categories,  ServiceClient client, int userId)
+        public AddCategoryForm(IEnumerable<Category> noteCategories,  ServiceClient client, User user)
         {
             InitializeComponent();
             listCategories.DataSource = Categories;
             listCategories.DisplayMember = "Name";
             _serviceClient = client;
-            _userId = userId;
+            _user = user;
+            _noteCategories = noteCategories;
 
-            foreach (var category in categories)
+            foreach (var category in user.Categories.Except(noteCategories, new MainForm.CategoriesComparer()).ToList())
             {
                 Categories.Add(category);
             }
@@ -30,7 +33,7 @@ namespace Notes.WinForms.Forms
         
         private void btnCreateCategory_Click(object sender, EventArgs e)
         {
-            using (var form = new CreateCategoryForm())
+            using (var form = new CreateOrEditCategoryForm())
             {
                 if (form.ShowDialog() != DialogResult.OK) return;
 
@@ -40,12 +43,15 @@ namespace Notes.WinForms.Forms
                     SelectedCategoriesIndices.Add(index);
                 }
                 SelectedCategoriesIndices.Add(Categories.Count);
-                Categories.Add(_serviceClient.CreateCategory(form.CategoryName, _userId));
+                Categories.Add(_serviceClient.CreateCategory(form.CategoryName, _user.Id));
 
                 foreach (var index in SelectedCategoriesIndices)
                 {
                     listCategories.SetItemChecked(index, true);
                 }
+                var categories = _user.Categories.ToList();
+                categories.Add(Categories.Last());
+               _user.Categories = categories;
             }
         }
 
@@ -61,10 +67,12 @@ namespace Notes.WinForms.Forms
         private void btnUpdateCategories_Click(object sender, EventArgs e)
         {
             Categories.Clear();
-            foreach (var category in _serviceClient.GetUserCategories(_userId))
+            _user.Categories = _serviceClient.GetUserCategories(_user.Id);
+            foreach (var category in _user.Categories.Except(_noteCategories, new MainForm.CategoriesComparer()))
             {
-                Categories.Add(category);
+                Categories.Add(category); 
             }
         }
     }
+
 }

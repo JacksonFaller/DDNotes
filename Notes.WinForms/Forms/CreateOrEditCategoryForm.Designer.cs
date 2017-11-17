@@ -1,6 +1,6 @@
 ﻿namespace Notes.WinForms.Forms
 {
-    partial class CreateCategoryForm
+    partial class CreateOrEditCategoryForm
     {
         /// <summary>
         /// Required designer variable.

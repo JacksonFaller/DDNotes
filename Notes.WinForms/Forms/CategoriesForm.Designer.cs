@@ -33,6 +33,7 @@
             this.btnDeleteCategory = new System.Windows.Forms.Button();
             this.btnUpdateCategories = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
+            this.btnChangeCategory = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // listCategories
@@ -40,7 +41,7 @@
             this.listCategories.FormattingEnabled = true;
             this.listCategories.Location = new System.Drawing.Point(12, 30);
             this.listCategories.Name = "listCategories";
-            this.listCategories.Size = new System.Drawing.Size(214, 173);
+            this.listCategories.Size = new System.Drawing.Size(237, 173);
             this.listCategories.TabIndex = 0;
             // 
             // btnCreateCategory
@@ -55,7 +56,7 @@
             // 
             // btnDeleteCategory
             // 
-            this.btnDeleteCategory.Location = new System.Drawing.Point(151, 209);
+            this.btnDeleteCategory.Location = new System.Drawing.Point(174, 209);
             this.btnDeleteCategory.Name = "btnDeleteCategory";
             this.btnDeleteCategory.Size = new System.Drawing.Size(75, 23);
             this.btnDeleteCategory.TabIndex = 1;
@@ -65,7 +66,7 @@
             // 
             // btnUpdateCategories
             // 
-            this.btnUpdateCategories.Location = new System.Drawing.Point(151, 4);
+            this.btnUpdateCategories.Location = new System.Drawing.Point(173, 4);
             this.btnUpdateCategories.Name = "btnUpdateCategories";
             this.btnUpdateCategories.Size = new System.Drawing.Size(75, 23);
             this.btnUpdateCategories.TabIndex = 2;
@@ -83,16 +84,29 @@
             this.label1.TabIndex = 3;
             this.label1.Text = "Мои Категории";
             // 
+            // btnChangeCategory
+            // 
+            this.btnChangeCategory.Location = new System.Drawing.Point(93, 209);
+            this.btnChangeCategory.Name = "btnChangeCategory";
+            this.btnChangeCategory.Size = new System.Drawing.Size(75, 23);
+            this.btnChangeCategory.TabIndex = 4;
+            this.btnChangeCategory.Text = "Изменить";
+            this.btnChangeCategory.UseVisualStyleBackColor = true;
+            this.btnChangeCategory.Click += new System.EventHandler(this.btnChangeCategory_Click);
+            // 
             // CategoriesForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(238, 252);
+            this.ClientSize = new System.Drawing.Size(260, 244);
+            this.Controls.Add(this.btnChangeCategory);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.btnUpdateCategories);
             this.Controls.Add(this.btnDeleteCategory);
             this.Controls.Add(this.btnCreateCategory);
             this.Controls.Add(this.listCategories);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+            this.MaximizeBox = false;
             this.Name = "CategoriesForm";
             this.Text = "CategoriesForm";
             this.ResumeLayout(false);
@@ -107,5 +121,6 @@
         private System.Windows.Forms.Button btnDeleteCategory;
         private System.Windows.Forms.Button btnUpdateCategories;
         private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Button btnChangeCategory;
     }
 }

@@ -4,7 +4,6 @@ using System.ComponentModel;
 using System.Windows.Forms;
 using Notes.Model;
 using System.Linq;
-using System.Text;
 
 namespace Notes.WinForms.Forms
 {
@@ -12,11 +11,10 @@ namespace Notes.WinForms.Forms
     {
         private readonly ServiceClient _serviceClient = new ServiceClient("http://localhost:59358/api/");
         private User _user;
-
         private readonly BindingList<Note> _notes = new BindingList<Note>();
         private readonly BindingList<Note> _sharedNotes = new BindingList<Note>();
         private readonly List<int> _filteredCategoriesIndices = new List<int>();
-        private int _dgCategoriesColumnIndex;
+        private int _categoriesColumnIndex;
 
         public MainForm()
         {
@@ -34,7 +32,7 @@ namespace Notes.WinForms.Forms
                 if (startfrom.ShowDialog() != DialogResult.OK) Close();
                 _user = startfrom.CurrentUser;
             }
-            _user.Notes = _serviceClient.GetNotes(_user.Id);
+            _user.Notes = _serviceClient.GetUserNotes(_user.Id);
             _user.Categories = _serviceClient.GetUserCategories(_user.Id);
             foreach (var note in _user.Notes)
             {
@@ -42,16 +40,9 @@ namespace Notes.WinForms.Forms
                 _notes.Add(note);
             }
 
-            _dgCategoriesColumnIndex = DGListNotes.Columns.Add(new DataGridViewTextBoxColumn());
-            DGListNotes.Columns[_dgCategoriesColumnIndex].HeaderText = "Категории";
-            DGListNotes.Columns[_dgCategoriesColumnIndex].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
-
-            for (int i = 0; i < _notes.Count; i++)
-            {
-                SetCellComboBoxItems(DGListNotes, i, _dgCategoriesColumnIndex, _notes[i].Categories.Select(x => x.Name));
-            }
             btnUpdateSharedNotes_Click(sender, e);
             listSharedNotes.ClearSelected();
+            Show();
         }
 
         private void btnCreateNote_Click(object sender, EventArgs e)
@@ -61,9 +52,17 @@ namespace Notes.WinForms.Forms
                 if (form.ShowDialog() == DialogResult.OK)
                 {
                     _notes.Add(_serviceClient.CreateNote(
-                        new Note {Title = form.Note.Title, Text = form.Note.Text, Creator = _user.Id}));
+                        new Note {Title = form.Note.Title, Text = form.Note.Text, Creator = _user.Id, Categories = Enumerable.Empty<Category>()}));
                 }
+                if(form.AddedCategories.Count == 0) return;
+                foreach (var category in form.AddedCategories)
+                {
+                    _serviceClient.AddCategoryToNote(_notes[_notes.Count - 1].Id, category.Id);
+                }
+                _notes.Last().Categories = form.AddedCategories;
+                _user.Categories.ToList().AddRange(form.AddedCategories);
             }
+            DGListNotes.UpdateCellValue(_categoriesColumnIndex, _notes.Count - 1);
         }
 
         private void btnEditNote_Click(object sender, EventArgs e)
@@ -74,28 +73,38 @@ namespace Notes.WinForms.Forms
                 form.Text = "Изменить заметку";
                 if (form.ShowDialog() != DialogResult.OK) return;
 
-                 var note = _serviceClient.UpdateNote(new Note {Id = _notes[selected].Id, Title = form.Note.Title, Text = form.Note.Text});
-                _notes[selected].Title = note.Title;
-                _notes[selected].Text = note.Text;
-                _notes[selected].ChangingDate = form.Note.ChangingDate;
-                _notes[selected].Categories = form.Note.Categories;
+                if (form.IsNoteTextChanged || form.IsNoteTitleChanged)
+                {
+                    var note = _serviceClient.UpdateNote(new Note
+                    {
+                        Id = _notes[selected].Id,
+                        Title = form.Note.Title,
+                        Text = form.Note.Text
+                    });
+                    _notes[selected].Title = note.Title;
+                    _notes[selected].Text = note.Text;
+                    _notes[selected].ChangingDate = note.ChangingDate;
+                }
+                if (form.AddedCategories.Count == 0 && form.RemovedCategories.Count == 0) return;
+
                 foreach (var category in form.AddedCategories)
                 {
                     _serviceClient.AddCategoryToNote(_notes[selected].Id, category.Id);
                 }
+                _user.Categories.ToList().AddRange(form.AddedCategories);
 
                 foreach (var category in form.RemovedCategories)
                 {
                     _serviceClient.RemoveCategoryFromNote(_notes[selected].Id, category.Id);
                 }
-
-                SetCellComboBoxItems(DGListNotes, selected, _dgCategoriesColumnIndex, _notes[selected].Categories.Select(x => x.Name));
             }
+            DGListNotes.UpdateCellValue(_categoriesColumnIndex, selected);
         }
 
         private void btnDeleteNote_Click(object sender, EventArgs e)
         {
             _serviceClient.DeleteNote(_notes[DGListNotes.SelectedRows[0].Index].Id);
+            _notes.RemoveAt(DGListNotes.SelectedRows[0].Index);
         }
 
         private void listNotes_DoubleClick(object sender, DataGridViewCellEventArgs e)
@@ -114,6 +123,11 @@ namespace Notes.WinForms.Forms
                         break;
                     case "ChangingDate":
                         DGListNotes.Columns[i].HeaderText = "Дата изменения";
+                        break;
+                    case "CategoriesToString":
+                        DGListNotes.Columns[i].HeaderText = "Категории";
+                        DGListNotes.Columns[i].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+                        _categoriesColumnIndex = i;
                         break;
                     default:
                         DGListNotes.Columns[i].Visible = false;
@@ -145,24 +159,12 @@ namespace Notes.WinForms.Forms
             }
         }
 
-        private void SetCellComboBoxItems<T>(DataGridView dataGrid, int rowIndex, int colIndex, IEnumerable<T> itemsToAdd)
-        {
-            DataGridViewTextBoxCell dgvcbc = (DataGridViewTextBoxCell)dataGrid.Rows[rowIndex].Cells[colIndex];
-
-            StringBuilder sb =new StringBuilder();
-            foreach (var itemToAdd in itemsToAdd)
-            {
-                sb.Append($"{itemToAdd.ToString()} ");
-            }
-            dgvcbc.Value = sb.ToString();
-        }
-
         private void listSharedNotes_DoubleClick(object sender, MouseEventArgs e)
         {
             var index = listSharedNotes.IndexFromPoint(e.Location);
             if (index != ListBox.NoMatches)
             {
-                new ViewNoteForm(_sharedNotes[index]).ShowDialog();
+                new EditSharedNoteForm(_sharedNotes[index]).ShowDialog();
             }
         }
 
@@ -202,11 +204,25 @@ namespace Notes.WinForms.Forms
             }
         }
 
-        private void btnViewNote_Click(object sender, EventArgs e)
+        private void btnOpenSharedNote_Click(object sender, EventArgs e)
         {
-            if(listSharedNotes.SelectedIndex!= -1)
-                new ViewNoteForm(_sharedNotes[listSharedNotes.SelectedIndex]).ShowDialog();
+            var selected = listSharedNotes.SelectedIndex;
+            if (listSharedNotes.SelectedIndex == -1) return;
+            using (var form = new EditSharedNoteForm(_sharedNotes[selected]))
+            {
+                if (form.ShowDialog() != DialogResult.OK) return;
+                var note = _serviceClient.UpdateNote(new Note
+                {
+                    Id = form.Note.Id,
+                    Title = form.Note.Title,
+                    Text = form.Note.Text
+                });
+
+                _sharedNotes[selected].Title = note.Title;
+                _sharedNotes[selected].Text = note.Text;
+            }
         }
+
 
         private void btnExit_Click(object sender, EventArgs e)
         {
@@ -219,34 +235,77 @@ namespace Notes.WinForms.Forms
             {
                 form.ShowDialog();
                 _user.Categories = form.Categories;
-                if (form.RemovedCategoiesIds.Count != 0)
+                var categoriesComparer = new CategoriesComparer();
+                if (form.RemovedCategories.Count != 0)
                 {
                     for (int i = 0; i < _notes.Count; i++)
                     {
-                        var result = _notes[i].Categories.Except(form.RemovedCategoiesIds, new CategoriesComparer()).ToList();
-                        if (result.Count < _notes[i].Categories.Count())
+                        var categories = _notes[i].Categories as IList<Category> ?? _notes[i].Categories.ToList();
+                        var result = categories.Except(
+                            form.RemovedCategories, categoriesComparer).ToList();
+                        if (result.Count < categories.Count)
                         {
                             _notes[i].Categories = result;
-                            SetCellComboBoxItems(DGListNotes, i, _dgCategoriesColumnIndex, 
-                                result.Select(x => x.Name));
+                            DGListNotes.UpdateCellValue(_categoriesColumnIndex, i);
+                        }
+                    }
+                }
+                if (form.UpdatedCategories.Count != 0)
+                {
+                    bool isUpdated = false;
+                    for (int i = 0; i < _notes.Count; i++)
+                    {
+                        foreach (var category in _notes[i].Categories)
+                        {
+                            var updCategory = form.UpdatedCategories.Find(x => x.Id == category.Id);
+                            if (updCategory != null)
+                            {
+                                category.Name = updCategory.Name;
+                                isUpdated = true;
+                            }
+                        }
+                        if(isUpdated)
+                        {
+                            DGListNotes.UpdateCellValue(_categoriesColumnIndex, i);
+                            isUpdated = false;
                         }
                     }
                 }
             }
-
         }
 
         public class CategoriesComparer : IEqualityComparer<Category>
         {
             public bool Equals(Category x, Category y)
             {
+                if (ReferenceEquals(x, y))
+                    return true;
                 return x?.Id == y?.Id;
             }
 
             public int GetHashCode(Category category)
             {
-                return category.GetHashCode();
+                return category.Id.GetHashCode();
+            }
+        }
+
+        private void btnChangeUser_Click(object sender, EventArgs e)
+        {
+            _notes.Clear();
+            _sharedNotes.Clear();
+            _user = null;
+            _filteredCategoriesIndices.Clear();
+            MainForm_Load(sender, e);
+        }
+
+        private void btnUpdateNotes_Click(object sender, EventArgs e)
+        {
+            _notes.Clear();
+            foreach (var note in _serviceClient.GetUserNotes(_user.Id))
+            {
+                _notes.Add(note);
             }
         }
     }
 }
+

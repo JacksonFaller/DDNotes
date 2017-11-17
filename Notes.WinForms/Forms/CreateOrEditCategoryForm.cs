@@ -3,12 +3,19 @@ using System.Windows.Forms;
 
 namespace Notes.WinForms.Forms
 {
-    public partial class CreateCategoryForm : Form
+    public partial class CreateOrEditCategoryForm : Form
     {
         public string CategoryName { get; set; }
-        public CreateCategoryForm()
+
+        public CreateOrEditCategoryForm()
         {
             InitializeComponent();
+        }
+
+        public CreateOrEditCategoryForm(string categoryName) : this()
+        {
+            txtCategoryName.Text = categoryName;
+            btnCreate.Text = "Изменить";
         }
 
         private void btnCreate_Click(object sender, EventArgs e)

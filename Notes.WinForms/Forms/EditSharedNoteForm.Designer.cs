@@ -1,6 +1,6 @@
 ﻿namespace Notes.WinForms.Forms
 {
-    partial class ViewNoteForm
+    partial class EditSharedNoteForm
     {
         /// <summary>
         /// Required designer variable.
@@ -35,13 +35,14 @@
             this.txtNoteTitle = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
             this.txtNoteText = new System.Windows.Forms.RichTextBox();
+            this.btnSave = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // label3
             // 
             this.label3.AutoSize = true;
             this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.label3.Location = new System.Drawing.Point(440, 44);
+            this.label3.Location = new System.Drawing.Point(450, 37);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(89, 20);
             this.label3.TabIndex = 18;
@@ -51,15 +52,16 @@
             // 
             this.listNoteCategories.Enabled = false;
             this.listNoteCategories.FormattingEnabled = true;
-            this.listNoteCategories.Location = new System.Drawing.Point(445, 67);
+            this.listNoteCategories.Location = new System.Drawing.Point(454, 60);
             this.listNoteCategories.Name = "listNoteCategories";
-            this.listNoteCategories.Size = new System.Drawing.Size(160, 225);
+            this.listNoteCategories.Size = new System.Drawing.Size(160, 238);
             this.listNoteCategories.TabIndex = 17;
             // 
             // btnCancel
             // 
             this.btnCancel.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
-            this.btnCancel.Location = new System.Drawing.Point(252, 306);
+            this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            this.btnCancel.Location = new System.Drawing.Point(332, 317);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(75, 23);
             this.btnCancel.TabIndex = 16;
@@ -71,7 +73,7 @@
             // 
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.label1.Location = new System.Drawing.Point(2, 11);
+            this.label1.Location = new System.Drawing.Point(12, 9);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(90, 20);
             this.label1.TabIndex = 11;
@@ -81,17 +83,16 @@
             // 
             this.txtNoteTitle.BackColor = System.Drawing.SystemColors.ButtonHighlight;
             this.txtNoteTitle.HideSelection = false;
-            this.txtNoteTitle.Location = new System.Drawing.Point(113, 13);
+            this.txtNoteTitle.Location = new System.Drawing.Point(120, 12);
             this.txtNoteTitle.Name = "txtNoteTitle";
-            this.txtNoteTitle.ReadOnly = true;
-            this.txtNoteTitle.Size = new System.Drawing.Size(325, 20);
+            this.txtNoteTitle.Size = new System.Drawing.Size(328, 20);
             this.txtNoteTitle.TabIndex = 12;
             // 
             // label2
             // 
             this.label2.AutoSize = true;
             this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.label2.Location = new System.Drawing.Point(2, 44);
+            this.label2.Location = new System.Drawing.Point(12, 37);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(52, 20);
             this.label2.TabIndex = 13;
@@ -100,18 +101,31 @@
             // txtNoteText
             // 
             this.txtNoteText.BackColor = System.Drawing.SystemColors.ControlLightLight;
-            this.txtNoteText.Location = new System.Drawing.Point(6, 67);
+            this.txtNoteText.Location = new System.Drawing.Point(16, 60);
             this.txtNoteText.Name = "txtNoteText";
-            this.txtNoteText.ReadOnly = true;
-            this.txtNoteText.Size = new System.Drawing.Size(432, 225);
+            this.txtNoteText.Size = new System.Drawing.Size(432, 240);
             this.txtNoteText.TabIndex = 14;
             this.txtNoteText.Text = "";
             // 
-            // ViewNoteForm
+            // btnSave
             // 
+            this.btnSave.DialogResult = System.Windows.Forms.DialogResult.OK;
+            this.btnSave.Location = new System.Drawing.Point(210, 317);
+            this.btnSave.Name = "btnSave";
+            this.btnSave.Size = new System.Drawing.Size(75, 23);
+            this.btnSave.TabIndex = 19;
+            this.btnSave.Text = "Сохранить";
+            this.btnSave.UseVisualStyleBackColor = true;
+            this.btnSave.Click += new System.EventHandler(this.btnSave_Click);
+            // 
+            // EditShareNoteForm
+            // 
+            this.AcceptButton = this.btnSave;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(615, 341);
+            this.CancelButton = this.btnCancel;
+            this.ClientSize = new System.Drawing.Size(623, 352);
+            this.Controls.Add(this.btnSave);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.listNoteCategories);
             this.Controls.Add(this.btnCancel);
@@ -119,8 +133,8 @@
             this.Controls.Add(this.txtNoteTitle);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.txtNoteText);
-            this.Name = "ViewNoteForm";
-            this.Text = "Просмотр заметки";
+            this.Name = "EditShareNoteForm";
+            this.Text = "Редактирование общей заметки";
             this.Load += new System.EventHandler(this.ViewNoteForm_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -136,5 +150,6 @@
         private System.Windows.Forms.TextBox txtNoteTitle;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.RichTextBox txtNoteText;
+        private System.Windows.Forms.Button btnSave;
     }
 }

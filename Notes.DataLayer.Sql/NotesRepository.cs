@@ -50,14 +50,9 @@ namespace Notes.DataLayer.Sql
                 connection.Open();
                 using (var command = connection.CreateCommand())
                 {
-                    command.CommandText = "delete from Notes output deleted.Id where Id = @id";
+                    command.CommandText = "delete from Notes where Id = @id";
                     command.Parameters.AddWithValue("@id", id);
-
-                    using (var reader = command.ExecuteReader())
-                    {
-                        if (!reader.Read())
-                            throw new ArgumentException($"Заметка с id: {id} не найдена");
-                    }
+                    command.ExecuteNonQuery();
                 }
             }
         }
@@ -92,14 +87,14 @@ namespace Notes.DataLayer.Sql
             }
         }
 
-        public IEnumerable<Note> GetUsersNotes(int userId)
+        public IEnumerable<Note> GetUserNotes(int userId)
         {
             using (var connection = new SqlConnection(_connectionString))
             {
                 connection.Open();
                 using (var command = connection.CreateCommand())
                 {
-                    command.CommandText = 
+                    command.CommandText =
                         "select * from Notes where Creator = @userId";
                     command.Parameters.AddWithValue("@userId", userId);
 
@@ -306,7 +301,7 @@ namespace Notes.DataLayer.Sql
                     commmandBuilder.Append($"[Changing date] = @date {outputParam} where Id = @id");
 
                     command.CommandText = commmandBuilder.ToString();
-                    
+
                     command.Parameters.AddWithValue("@date", note.ChangingDate);
                     command.Parameters.AddWithValue("@id", note.Id);
 
