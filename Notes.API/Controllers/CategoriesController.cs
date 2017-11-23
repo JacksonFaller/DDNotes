@@ -10,6 +10,7 @@ namespace Notes.API.Controllers
     /// <summary>
     /// CategoriesRepository controller
     /// </summary>
+    [ExceptionHandling]
     public class CategoriesController : ApiController
     {
         private const string ConnectionString =
@@ -29,7 +30,6 @@ namespace Notes.API.Controllers
         /// <returns>returns category if exists</returns>
         [HttpGet]
         [Route("api/categories/{id}")]
-        [ExceptionHandling]
         public Category Get(int id)
         {
             Logger.Logger.Instance.Info($"Получение категории с id: {id}.");
@@ -60,10 +60,15 @@ namespace Notes.API.Controllers
         /// <param name="id">category id</param>
         [HttpPut]
         [Route("api/categories/{id}")]
-        [ExceptionHandling]
         public Category Update([FromBody]string name, int id)
         {
             Logger.Logger.Instance.Info($"Изменение категории с id: {id}. Новое название: {name}.");
+            if (name == null)
+                throw new HttpResponseException(new HttpResponseMessage
+                {
+                    StatusCode = HttpStatusCode.BadRequest,
+                    Content = new StringContent("Название заметки не может быть null.")
+                });
             return _categoriesRepository.Update(name, id);
         }
 
@@ -73,7 +78,6 @@ namespace Notes.API.Controllers
         /// <param name="id">category id</param>
         [HttpDelete]
         [Route("api/categories/{id}")]
-        [ExceptionHandling]
         public void Delete(int id)
         {
             Logger.Logger.Instance.Info($"Удаление категории с id: {id}.");

@@ -166,7 +166,6 @@
             this.Controls.Add(this.txtNoteText);
             this.Name = "CreateOrEditNoteForm";
             this.Text = "Создать заметку";
-            this.Load += new System.EventHandler(this.CreateOrEditNoteForm_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 

@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using System.Net;
+using System.Net.Http;
 using System.Web.Http;
 using Notes.DataLayer;
 using Notes.DataLayer.Sql;
@@ -9,6 +11,7 @@ namespace Notes.API.Controllers
     /// <summary>
     /// NotesRepository controller
     /// </summary>
+    [ExceptionHandling]
     public class NotesController : ApiController
     {
         private const string ConnectionString =
@@ -28,7 +31,6 @@ namespace Notes.API.Controllers
         /// <returns>returns note if exists</returns>
         [HttpGet]
         [Route("api/notes/{id}")]
-        [ExceptionHandling]
         public Note Get(int id)
         {
             Logger.Logger.Instance.Info($"Получение заметки с id: {id}.");
@@ -46,8 +48,13 @@ namespace Notes.API.Controllers
         {
             Logger.Logger.Instance.Info(
                 $"Создание заметки. Заголовок: {note.Title}, Текст: {note.Text}, Создатель: {note.Creator}.");
+            if (note.Title == null || note.Text == null)
+                throw new HttpResponseException(new HttpResponseMessage
+                {
+                    StatusCode = HttpStatusCode.BadRequest,
+                    Content = new StringContent("Поля Title и Text должны быть заданы")
+                });
             return _notesRepository.Create(note);
-            //throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.BadRequest, ModelState));
         }
 
         /// <summary>
@@ -58,11 +65,16 @@ namespace Notes.API.Controllers
         /// <returns>updated note</returns>
         [HttpPut]
         [Route("api/notes/{id}")]
-        [ExceptionHandling]
         public Note Update([FromBody]Note note, int id)
         {
             Logger.Logger.Instance.Info(
                 $"Изменение заметки с id: {id}. Новые - Заголовок: {note.Title}, Текст: {note.Text}.");
+            if (note.Title == null && note.Text == null)
+                throw new HttpResponseException(new HttpResponseMessage
+                {
+                    StatusCode = HttpStatusCode.BadRequest,
+                    Content = new StringContent("Поля Title и Text не могут быть одновременно равны null")
+                });
             note.Id = id;
             return _notesRepository.Update(note);
         }
@@ -73,7 +85,6 @@ namespace Notes.API.Controllers
         /// <param name="id">note id to delete</param>
         [HttpDelete]
         [Route("api/notes/{id}")]
-        [ExceptionHandling]
         public void Delete(int id)
         {
             Logger.Logger.Instance.Info($"Удалеие заметки с id: {id}.");
@@ -87,7 +98,6 @@ namespace Notes.API.Controllers
         /// <param name="userId">shared user id</param>
         [HttpPost]
         [Route("api/notes/{id}/share/{userId}")]
-        [ExceptionHandling]
         public void Share(int id, int userId)
         {
             Logger.Logger.Instance.Info($"Поделиться заметкой с id: {id} с пользователем {userId}");
@@ -101,7 +111,6 @@ namespace Notes.API.Controllers
         /// <param name="userId">unshared user id</param>
         [HttpDelete]
         [Route("api/notes/{id}/unshare/{userId}")]
-        [ExceptionHandling]
         public void Unshare(int id, int userId)
         {
             Logger.Logger.Instance.Info($"Скрыть заметку заметку с id: {id} от пользователя {userId}");
@@ -115,7 +124,6 @@ namespace Notes.API.Controllers
         /// <returns>enumeration of shared users</returns>
         [HttpGet]
         [Route("api/notes/{id}/sharedUsers")]
-        [ExceptionHandling]
         public IEnumerable<User> GetSharedUsers(int id)
         {
             Logger.Logger.Instance.Info($"Получение общих пользователей заметки с id: {id}.");
@@ -129,7 +137,6 @@ namespace Notes.API.Controllers
         /// <param name="noteId">note id</param>
         [HttpPut]
         [Route("api/notes/{noteId}/addCategory")]
-        [ExceptionHandling]
         public void AddCategory([FromBody]int categoryId, int noteId)
         {
             Logger.Logger.Instance.Info(
@@ -144,7 +151,6 @@ namespace Notes.API.Controllers
         /// <param name="noteId">note id</param>
         [HttpPut]
         [Route("api/notes/{noteId}/removeCategory")]
-        [ExceptionHandling]
         public void RemoveCategory([FromBody]int categoryId, int noteId)
         {
             Logger.Logger.Instance.Info(
@@ -159,7 +165,6 @@ namespace Notes.API.Controllers
         /// <returns>enumeration of note categories</returns>
         [HttpGet]
         [Route("api/notes/{id}/categories")]
-        [ExceptionHandling]
         public IEnumerable<Category> GetNoteCategories(int id)
         {
             Logger.Logger.Instance.Info($"Получение категорий заметки с id: {id}.");

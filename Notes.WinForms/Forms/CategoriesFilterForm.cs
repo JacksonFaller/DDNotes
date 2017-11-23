@@ -2,35 +2,23 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
 using System.Windows.Forms;
+using Notes.WinForms.Forms.BL;
 
 namespace Notes.WinForms.Forms
 {
     internal partial class CategoriesFilterForm : Form
     {
-        public readonly BindingList<Category> Categories = new BindingList<Category>();
-        public List<int> SelectedCategoriestIndices = new List<int>();
-        private readonly ServiceClient _serviceClient;
-        private readonly int _userId;
+        public readonly CategoriesFilterFormBL FormBL;
 
-        public CategoriesFilterForm(IEnumerable<Category> categories, 
-            IEnumerable<int> filteredCategoriesIndices, ServiceClient client, int userId)
+        public CategoriesFilterForm(IEnumerable<Category> categories, IEnumerable<int> filteredCategoriesIndices, 
+            ServiceClient client, int userId)
         {
-            InitializeComponent(); 
-            listCategories.DataSource = Categories;
+            InitializeComponent();
+            FormBL = new CategoriesFilterFormBL(client, userId, categories, filteredCategoriesIndices);
+            listCategories.DataSource = FormBL.Categories;
             listCategories.DisplayMember = "Name";
-            _serviceClient = client;
-            _userId = userId;
-
-            foreach (var category in categories)
-            {
-                Categories.Add(category);
-            }
-
-            foreach (var index in filteredCategoriesIndices)
-            {
-                SelectedCategoriestIndices.Add(index);
-            }
         }
 
         private void btnClearSelection_Click(object sender, EventArgs e)
@@ -51,25 +39,17 @@ namespace Notes.WinForms.Forms
 
         private void btnFilter_Click(object sender, EventArgs e)
         {
-            SelectedCategoriestIndices.Clear();
-
-            foreach (int index in listCategories.CheckedIndices)
-            {
-                SelectedCategoriestIndices.Add(index);
-            }
+            FormBL.Filter(listCategories.CheckedIndices.Cast<int>());
         }
 
         private void btnUpdateCategories_Click(object sender, EventArgs e)
         {
-            foreach (var category in _serviceClient.GetUserCategories(_userId))
-            {
-                Categories.Add(category);
-            }
+            FormBL.UpdateCategories();
         }
 
         private void CategoriesFilterForm_Load(object sender, EventArgs e)
         {
-            foreach (var index in SelectedCategoriestIndices)
+            foreach (var index in FormBL.SelectedCategoriestIndices)
             {
                 listCategories.SetItemChecked(index, true);
             }

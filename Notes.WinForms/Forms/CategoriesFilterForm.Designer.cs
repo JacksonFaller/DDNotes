@@ -41,7 +41,7 @@
             // 
             this.label3.AutoSize = true;
             this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.label3.Location = new System.Drawing.Point(8, 9);
+            this.label3.Location = new System.Drawing.Point(8, 12);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(89, 20);
             this.label3.TabIndex = 10;
@@ -50,7 +50,7 @@
             // btnFilter
             // 
             this.btnFilter.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.btnFilter.Location = new System.Drawing.Point(11, 257);
+            this.btnFilter.Location = new System.Drawing.Point(12, 268);
             this.btnFilter.Name = "btnFilter";
             this.btnFilter.Size = new System.Drawing.Size(94, 23);
             this.btnFilter.TabIndex = 11;
@@ -60,7 +60,7 @@
             // 
             // btnClearSelection
             // 
-            this.btnClearSelection.Location = new System.Drawing.Point(114, 228);
+            this.btnClearSelection.Location = new System.Drawing.Point(127, 239);
             this.btnClearSelection.Name = "btnClearSelection";
             this.btnClearSelection.Size = new System.Drawing.Size(75, 23);
             this.btnClearSelection.TabIndex = 11;
@@ -71,7 +71,7 @@
             // btnCancel
             // 
             this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btnCancel.Location = new System.Drawing.Point(114, 257);
+            this.btnCancel.Location = new System.Drawing.Point(127, 268);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(75, 23);
             this.btnCancel.TabIndex = 12;
@@ -80,7 +80,7 @@
             // 
             // btnSelectAll
             // 
-            this.btnSelectAll.Location = new System.Drawing.Point(11, 228);
+            this.btnSelectAll.Location = new System.Drawing.Point(12, 239);
             this.btnSelectAll.Name = "btnSelectAll";
             this.btnSelectAll.Size = new System.Drawing.Size(94, 23);
             this.btnSelectAll.TabIndex = 13;
@@ -92,14 +92,14 @@
             // 
             this.listCategories.CheckOnClick = true;
             this.listCategories.FormattingEnabled = true;
-            this.listCategories.Location = new System.Drawing.Point(11, 32);
+            this.listCategories.Location = new System.Drawing.Point(12, 41);
             this.listCategories.Name = "listCategories";
-            this.listCategories.Size = new System.Drawing.Size(178, 184);
+            this.listCategories.Size = new System.Drawing.Size(190, 184);
             this.listCategories.TabIndex = 14;
             // 
             // btnUpdateCategories
             // 
-            this.btnUpdateCategories.Location = new System.Drawing.Point(114, 6);
+            this.btnUpdateCategories.Location = new System.Drawing.Point(127, 12);
             this.btnUpdateCategories.Name = "btnUpdateCategories";
             this.btnUpdateCategories.Size = new System.Drawing.Size(75, 23);
             this.btnUpdateCategories.TabIndex = 15;
@@ -113,7 +113,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.btnCancel;
-            this.ClientSize = new System.Drawing.Size(202, 292);
+            this.ClientSize = new System.Drawing.Size(214, 302);
             this.Controls.Add(this.btnUpdateCategories);
             this.Controls.Add(this.listCategories);
             this.Controls.Add(this.btnSelectAll);
@@ -121,8 +121,9 @@
             this.Controls.Add(this.btnClearSelection);
             this.Controls.Add(this.btnFilter);
             this.Controls.Add(this.label3);
+            this.MaximizeBox = false;
             this.Name = "CategoriesFilterForm";
-            this.Text = "CategoriesFilterForm";
+            this.Text = "Фильтр";
             this.Load += new System.EventHandler(this.CategoriesFilterForm_Load);
             this.ResumeLayout(false);
             this.PerformLayout();

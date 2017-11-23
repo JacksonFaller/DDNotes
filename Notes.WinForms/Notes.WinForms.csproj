@@ -74,12 +74,22 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BindingListExtensions.cs" />
     <Compile Include="Controls\UserControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="Controls\UserControl.Designer.cs">
       <DependentUpon>UserControl.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms.BL\AddCategoryFormBL.cs" />
+    <Compile Include="Forms.BL\CategoriesFilterFormBL.cs" />
+    <Compile Include="Forms.BL\CategoriesFormBL.cs" />
+    <Compile Include="Forms.BL\CreateOrEditNoteFormBL.cs" />
+    <Compile Include="Forms.BL\EditSharedNoteFormBL.cs" />
+    <Compile Include="Forms.BL\MainFormBL.cs" />
+    <Compile Include="Forms.BL\ShareNoteFormBL.cs" />
+    <Compile Include="Forms.BL\StartFormBL.cs" />
+    <Compile Include="Forms.BL\UnshareNoteFormBL.cs" />
     <Compile Include="Forms\AddCategoryForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -122,17 +132,17 @@
     <Compile Include="Forms\MainForm.Designer.cs">
       <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\ShareNote.cs">
+    <Compile Include="Forms\ShareNoteForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\ShareNote.Designer.cs">
-      <DependentUpon>ShareNote.cs</DependentUpon>
+    <Compile Include="Forms\ShareNoteForm.Designer.cs">
+      <DependentUpon>ShareNoteForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\UnshareNote.cs">
+    <Compile Include="Forms\UnshareNoteForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\UnshareNote.Designer.cs">
-      <DependentUpon>UnshareNote.cs</DependentUpon>
+    <Compile Include="Forms\UnshareNoteForm.Designer.cs">
+      <DependentUpon>UnshareNoteForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\EditSharedNoteForm.cs">
       <SubType>Form</SubType>
@@ -173,11 +183,11 @@
     <EmbeddedResource Include="Forms\MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\ShareNote.resx">
-      <DependentUpon>ShareNote.cs</DependentUpon>
+    <EmbeddedResource Include="Forms\ShareNoteForm.resx">
+      <DependentUpon>ShareNoteForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\UnshareNote.resx">
-      <DependentUpon>UnshareNote.cs</DependentUpon>
+    <EmbeddedResource Include="Forms\UnshareNoteForm.resx">
+      <DependentUpon>UnshareNoteForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\EditSharedNoteForm.resx">
       <DependentUpon>EditSharedNoteForm.cs</DependentUpon>
@@ -226,6 +236,7 @@
       <Install>false</Install>
     </BootstrapperPackage>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

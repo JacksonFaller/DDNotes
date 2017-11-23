@@ -1,6 +1,6 @@
 ﻿namespace Notes.WinForms.Forms
 {
-    partial class ShareNote
+    partial class ShareNoteForm
     {
         /// <summary>
         /// Required designer variable.
@@ -38,7 +38,7 @@
             // 
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.label1.Location = new System.Drawing.Point(12, 24);
+            this.label1.Location = new System.Drawing.Point(9, 24);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(103, 13);
             this.label1.TabIndex = 0;
@@ -46,15 +46,15 @@
             // 
             // txtUserName
             // 
-            this.txtUserName.Location = new System.Drawing.Point(15, 40);
+            this.txtUserName.Location = new System.Drawing.Point(12, 40);
             this.txtUserName.Name = "txtUserName";
-            this.txtUserName.Size = new System.Drawing.Size(165, 20);
+            this.txtUserName.Size = new System.Drawing.Size(201, 20);
             this.txtUserName.TabIndex = 1;
             // 
             // btnShareNote
             // 
             this.btnShareNote.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.btnShareNote.Location = new System.Drawing.Point(15, 82);
+            this.btnShareNote.Location = new System.Drawing.Point(12, 82);
             this.btnShareNote.Name = "btnShareNote";
             this.btnShareNote.Size = new System.Drawing.Size(79, 23);
             this.btnShareNote.TabIndex = 2;
@@ -65,7 +65,7 @@
             // btnCancel
             // 
             this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btnCancel.Location = new System.Drawing.Point(105, 82);
+            this.btnCancel.Location = new System.Drawing.Point(138, 82);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(75, 23);
             this.btnCancel.TabIndex = 2;
@@ -78,12 +78,13 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.btnCancel;
-            this.ClientSize = new System.Drawing.Size(196, 117);
+            this.ClientSize = new System.Drawing.Size(227, 117);
             this.Controls.Add(this.btnCancel);
             this.Controls.Add(this.btnShareNote);
             this.Controls.Add(this.txtUserName);
             this.Controls.Add(this.label1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
+            this.MaximizeBox = false;
             this.Name = "ShareNote";
             this.Text = "Поделиться заметкой";
             this.ResumeLayout(false);

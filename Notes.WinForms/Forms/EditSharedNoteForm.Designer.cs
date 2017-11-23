@@ -67,7 +67,6 @@
             this.btnCancel.TabIndex = 16;
             this.btnCancel.Text = "Закрыть";
             this.btnCancel.UseVisualStyleBackColor = true;
-            this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
             // 
             // label1
             // 
@@ -87,6 +86,7 @@
             this.txtNoteTitle.Name = "txtNoteTitle";
             this.txtNoteTitle.Size = new System.Drawing.Size(328, 20);
             this.txtNoteTitle.TabIndex = 12;
+            this.txtNoteTitle.TextChanged += new System.EventHandler(this.txtNoteTitle_TextChanged);
             // 
             // label2
             // 
@@ -106,6 +106,7 @@
             this.txtNoteText.Size = new System.Drawing.Size(432, 240);
             this.txtNoteText.TabIndex = 14;
             this.txtNoteText.Text = "";
+            this.txtNoteText.TextChanged += new System.EventHandler(this.txtNoteText_TextChanged);
             // 
             // btnSave
             // 
@@ -118,7 +119,7 @@
             this.btnSave.UseVisualStyleBackColor = true;
             this.btnSave.Click += new System.EventHandler(this.btnSave_Click);
             // 
-            // EditShareNoteForm
+            // EditSharedNoteForm
             // 
             this.AcceptButton = this.btnSave;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -133,7 +134,7 @@
             this.Controls.Add(this.txtNoteTitle);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.txtNoteText);
-            this.Name = "EditShareNoteForm";
+            this.Name = "EditSharedNoteForm";
             this.Text = "Редактирование общей заметки";
             this.Load += new System.EventHandler(this.ViewNoteForm_Load);
             this.ResumeLayout(false);

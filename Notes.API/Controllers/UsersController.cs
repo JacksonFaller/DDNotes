@@ -12,6 +12,7 @@ namespace Notes.API.Controllers
     /// <summary>
     /// UsersRepository controller
     /// </summary>
+    [ExceptionHandling]
     public class UsersController : ApiController
     {
         private const string ConnectionString =
@@ -47,7 +48,6 @@ namespace Notes.API.Controllers
         /// <returns>returns user if exists</returns>
         [HttpGet]
         [Route("api/users/{id}")]
-        [ExceptionHandling]
         public User Get(int id)
         {
             Logger.Logger.Instance.Info($"Получение пользователя с id: {id}.");
@@ -61,7 +61,6 @@ namespace Notes.API.Controllers
         /// <returns>returns user if exists</returns>
         [HttpGet]
         [Route("api/users/byName/{name}")]
-        [ExceptionHandling]
         public User Get(string name)
         {
             Logger.Logger.Instance.Info($"Получение пользователя с именем: {name}.");
@@ -131,7 +130,6 @@ namespace Notes.API.Controllers
         /// <returns>true if user valid, otherwise false</returns>
         [HttpPost]
         [Route("api/users/validate")]
-        [ExceptionHandling]
         public User Validate([FromBody]User user)
         {
             Logger.Logger.Instance.Info($"Валидация пользователя с именем: {user.Name} и паролем: {user.Password}.");
