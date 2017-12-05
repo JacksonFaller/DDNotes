@@ -57,6 +57,7 @@
             this.txtNoteTitle.Name = "txtNoteTitle";
             this.txtNoteTitle.Size = new System.Drawing.Size(325, 20);
             this.txtNoteTitle.TabIndex = 2;
+            this.txtNoteTitle.TabStop = false;
             this.txtNoteTitle.TextChanged += new System.EventHandler(this.txtNoteTitle_TextChanged);
             // 
             // label2
@@ -71,9 +72,11 @@
             // 
             // txtNoteText
             // 
+            this.txtNoteText.AcceptsTab = true;
             this.txtNoteText.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtNoteText.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.txtNoteText.Location = new System.Drawing.Point(16, 61);
             this.txtNoteText.Name = "txtNoteText";
             this.txtNoteText.Size = new System.Drawing.Size(431, 246);

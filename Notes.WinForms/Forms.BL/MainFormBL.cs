@@ -47,6 +47,7 @@ namespace Notes.WinForms.Forms.BL
             Notes[selected].Title = note.Title;
             Notes[selected].Text = note.Text;
             Notes[selected].ChangingDate = note.ChangingDate;
+            Notes.ResetItem(selected);
         }
 
         public void AddCategoriesToNote(List<Category> addedCategories, int selected)
@@ -126,7 +127,7 @@ namespace Notes.WinForms.Forms.BL
             Notes.AddRange(ServiceClient.GetUserNotes(User.Id));
         }
 
-        public void Load(User user)
+        public void Initialize(User user)
         {
             User = user;
             User.Notes = ServiceClient.GetUserNotes(User.Id);
@@ -166,8 +167,6 @@ namespace Notes.WinForms.Forms.BL
                 isUpdated = false;
             }
         }
-
-        
 
         public void UpdateUserCategories(IList<Category> categories)
         {

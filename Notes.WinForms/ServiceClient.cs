@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Threading.Tasks;
 
 namespace Notes.WinForms
 {
@@ -105,9 +106,9 @@ namespace Notes.WinForms
             return ResponseParse<IEnumerable<Note>>(response);
         }
 
-        public User ValidateUser(User user)
+        public async Task<User> ValidateUser(User user)
         {
-            var response = _client.PostAsJsonAsync("users/validate", user).Result;
+            var response = await _client.PostAsJsonAsync("users/validate", user);
             return ResponseParse<User>(response);
         }
 

@@ -121,6 +121,7 @@
             this.Controls.Add(this.btnClearSelection);
             this.Controls.Add(this.btnFilter);
             this.Controls.Add(this.label3);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.MaximizeBox = false;
             this.Name = "CategoriesFilterForm";
             this.Text = "Фильтр";

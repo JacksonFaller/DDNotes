@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Data;
 using System.Windows.Forms;
 using Notes.WinForms.Forms.BL;
 
@@ -23,7 +24,7 @@ namespace Notes.WinForms.Forms
             using (var startfrom = new StartForm(_formBL.ServiceClient))
             {
                 if (startfrom.ShowDialog() != DialogResult.OK) Close();
-                _formBL.Load(startfrom.FormBL.CurrentUser);
+                _formBL.Initialize(startfrom.FormBL.CurrentUser);
             }
             btnUpdateSharedNotes_Click(sender, e);
             listSharedNotes.ClearSelected();
@@ -56,11 +57,11 @@ namespace Notes.WinForms.Forms
                     _formBL.EditNote(form.FormBL.Note.Title, form.FormBL.Note.Text, selected);
                 }
                 if (form.FormBL.AddedCategories.Count == 0 && form.FormBL.RemovedCategories.Count == 0) return;
-
                 _formBL.AddCategoriesToNote(form.FormBL.AddedCategories, selected);
                 _formBL.RemoveCategoriesFromNote(form.FormBL.RemovedCategories, selected);
             }
             DGListNotes.UpdateCellValue(_categoriesColumnIndex, selected);
+            //UpdateDGRow(selected);
         }
 
         private void btnDeleteNote_Click(object sender, EventArgs e)
@@ -101,13 +102,6 @@ namespace Notes.WinForms.Forms
         {
             var index = DGListNotes.SelectedRows[0].Index;
             new ShareNoteForm(_formBL.ServiceClient, _formBL.Notes[index].Id, _formBL.User.Name).ShowDialog();
-            btnUpdateSharedNotes_Click(sender, e);
-        }
-
-        private void btnUnshareNote_Click(object sender, EventArgs e)
-        {
-            var index = DGListNotes.SelectedRows[0].Index;
-            new UnshareNoteForm(_formBL.ServiceClient, _formBL.Notes[index].Id).ShowDialog();
         }
 
         private void btnUpdateSharedNotes_Click(object sender, EventArgs e)
@@ -200,6 +194,14 @@ namespace Notes.WinForms.Forms
         private void btnExit_Click(object sender, EventArgs e)
         {
             Close();
+        }
+
+        private void UpdateDGRow(int rowIndex)
+        {
+            for (int i = 0; i < DGListNotes.ColumnCount; i++)
+            {
+                DGListNotes.UpdateCellValue(i, rowIndex);
+            }
         }
     }
 }

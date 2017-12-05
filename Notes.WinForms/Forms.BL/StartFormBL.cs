@@ -1,4 +1,6 @@
-﻿using Notes.Model;
+﻿using System.Threading.Tasks;
+using System.Windows.Forms;
+using Notes.Model;
 
 namespace Notes.WinForms.Forms.BL
 {
@@ -17,9 +19,9 @@ namespace Notes.WinForms.Forms.BL
             CurrentUser = _serviceClient.CreateUser(new User { Name = userName, Password = userPassword });
         }
 
-        public void Login(string userName, string userPassword)
+        public async Task Login(string userName, string userPassword)
         {
-            CurrentUser = _serviceClient.ValidateUser(new User { Name = userName, Password = userPassword });
+            CurrentUser = await _serviceClient.ValidateUser(new User { Name = userName, Password = userPassword });
         }
 
         public bool IsInputDataValid(string userName, string userPassword, out string message)

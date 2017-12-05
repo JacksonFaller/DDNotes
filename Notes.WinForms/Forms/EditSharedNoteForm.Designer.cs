@@ -86,6 +86,7 @@
             this.txtNoteTitle.Name = "txtNoteTitle";
             this.txtNoteTitle.Size = new System.Drawing.Size(328, 20);
             this.txtNoteTitle.TabIndex = 12;
+            this.txtNoteTitle.TabStop = false;
             this.txtNoteTitle.TextChanged += new System.EventHandler(this.txtNoteTitle_TextChanged);
             // 
             // label2

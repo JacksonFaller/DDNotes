@@ -64,7 +64,7 @@ namespace Notes.WinForms.Forms
                 e.Cancel = true;*/
         }
 
-        private void btnLogin_Click(object sender, EventArgs e)
+        private async void btnLogin_Click(object sender, EventArgs e)
         {
             string message;
             if (!FormBL.IsInputDataValid(userControl.UserName, userControl.UserPassword, out message))
@@ -72,9 +72,11 @@ namespace Notes.WinForms.Forms
                 MessageBox.Show(message, "Внимание", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
+            btnCreateUser.Enabled = false;
+            btnLogin.Enabled = false;
             try
             {
-                FormBL.Login(userControl.UserName, userControl.UserPassword);
+                await FormBL.Login(userControl.UserName, userControl.UserPassword);
                 DialogResult = DialogResult.OK;
                 Close();
             }

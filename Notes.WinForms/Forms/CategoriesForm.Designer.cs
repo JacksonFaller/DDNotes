@@ -38,6 +38,9 @@
             // 
             // listCategories
             // 
+            this.listCategories.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.listCategories.FormattingEnabled = true;
             this.listCategories.Location = new System.Drawing.Point(12, 30);
             this.listCategories.Name = "listCategories";
@@ -46,6 +49,7 @@
             // 
             // btnCreateCategory
             // 
+            this.btnCreateCategory.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
             this.btnCreateCategory.Location = new System.Drawing.Point(12, 209);
             this.btnCreateCategory.Name = "btnCreateCategory";
             this.btnCreateCategory.Size = new System.Drawing.Size(75, 23);
@@ -56,6 +60,7 @@
             // 
             // btnDeleteCategory
             // 
+            this.btnDeleteCategory.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
             this.btnDeleteCategory.Location = new System.Drawing.Point(174, 209);
             this.btnDeleteCategory.Name = "btnDeleteCategory";
             this.btnDeleteCategory.Size = new System.Drawing.Size(75, 23);
@@ -66,6 +71,7 @@
             // 
             // btnUpdateCategories
             // 
+            this.btnUpdateCategories.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnUpdateCategories.Location = new System.Drawing.Point(173, 4);
             this.btnUpdateCategories.Name = "btnUpdateCategories";
             this.btnUpdateCategories.Size = new System.Drawing.Size(75, 23);
@@ -86,6 +92,7 @@
             // 
             // btnUpdateCategory
             // 
+            this.btnUpdateCategory.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
             this.btnUpdateCategory.Location = new System.Drawing.Point(93, 209);
             this.btnUpdateCategory.Name = "btnUpdateCategory";
             this.btnUpdateCategory.Size = new System.Drawing.Size(75, 23);
@@ -105,10 +112,9 @@
             this.Controls.Add(this.btnDeleteCategory);
             this.Controls.Add(this.btnCreateCategory);
             this.Controls.Add(this.listCategories);
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.MaximizeBox = false;
             this.Name = "CategoriesForm";
-            this.Text = "CategoriesForm";
+            this.Text = "Категории";
             this.ResumeLayout(false);
             this.PerformLayout();
 
