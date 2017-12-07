@@ -8,8 +8,10 @@ namespace Notes.WinForms
     {
         public static void AddRange<T>(this BindingList<T> list, IEnumerable<T> values)
         {
-            bool restore = list.RaiseListChangedEvents;
+            if (list == null) throw new ArgumentNullException(nameof(list));
+            if (values == null) throw new ArgumentNullException(nameof(values));
 
+            bool restore = list.RaiseListChangedEvents;
             try
             {
                 list.RaiseListChangedEvents = false;

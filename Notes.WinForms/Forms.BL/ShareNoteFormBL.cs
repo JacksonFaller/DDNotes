@@ -33,14 +33,11 @@ namespace Notes.WinForms.Forms.BL
 
         public void ShareNote(string userName)
         {
+            if (userName == _userName)
+                throw new ArgumentException($"Невозможно поделиться заметкой с текущим пользователем: {userName}");
             var user = _serviceClient.GetUser(userName);
             _serviceClient.ShareNote(_noteId, user.Id);
             _users.Add(user);
-        }
-
-        public bool IsSameUser(string userName)
-        {
-            return userName == _userName;
         }
     }
 }

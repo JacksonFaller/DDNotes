@@ -33,17 +33,15 @@ namespace Notes.WinForms.Forms
                     MessageBoxIcon.Warning);
                 return;
             }
-            if (_formBL.IsSameUser(txtUserName.Text))
-            {
-                MessageBox.Show("Нельзя поделиться заметкой с самим собой", "Внимание", MessageBoxButtons.OK,
-                    MessageBoxIcon.Warning);
-                return;
-            }
             try
             {
                 _formBL.ShareNote(txtUserName.Text);
                 MessageBox.Show($"Доступ к заметке был успешно предоставлен пользователю {txtUserName.Text}", "Успех",
                     MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (ArgumentException ex)
+            {
+                MessageBox.Show(ex.Message, "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             catch (HttpRequestException ex)
             {
